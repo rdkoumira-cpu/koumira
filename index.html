@@ -1,0 +1,1460 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Plateforme pédagogique consacrée à l'intégration économique et à la construction d'une Fédération ouest-africaine.">
+<title>Fédération Ouest-Africaine | Académie économique</title>
+
+<style>
+:root {
+    --green: #123d32;
+    --green2: #1d604c;
+    --gold: #d5a64b;
+    --cream: #f7f5ee;
+    --white: #ffffff;
+    --text: #26342f;
+    --muted: #718078;
+    --border: #e4e9e5;
+    --blue: #416e94;
+    --red: #b44d45;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.75;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button, input {
+    font: inherit;
+}
+
+/* NAVIGATION */
+
+.sidebar {
+    position: fixed;
+    width: 255px;
+    height: 100vh;
+    background: var(--green);
+    color: white;
+    padding: 28px 18px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 12px 25px;
+    border-bottom: 1px solid #41685b;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.logo small {
+    display: block;
+    font-size: 10px;
+    color: #c2d1ca;
+    font-weight: normal;
+    letter-spacing: 2px;
+}
+
+.nav-title {
+    color: #9db9ab;
+    font-size: 11px;
+    margin: 27px 12px 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 11px 13px;
+    margin: 4px 0;
+    border-radius: 7px;
+    color: #e3eee8;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #28604c;
+    color: white;
+    border-left: 3px solid var(--gold);
+}
+
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 200;
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* CONTENU PRINCIPAL */
+
+.main {
+    margin-left: 255px;
+}
+
+.topbar {
+    background: white;
+    padding: 17px 5%;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.topbar span {
+    color: var(--muted);
+}
+
+.hero {
+    background: linear-gradient(120deg, #123d32, #24674e);
+    color: white;
+    padding: 85px 7%;
+}
+
+.hero .tag {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 54px);
+    line-height: 1.2;
+    margin: 20px 0;
+    max-width: 850px;
+}
+
+.hero p {
+    max-width: 700px;
+    color: #dce9e1;
+    font-size: 17px;
+}
+
+.hero-button {
+    display: inline-block;
+    margin-top: 28px;
+    padding: 13px 25px;
+    background: var(--gold);
+    color: #19382d;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.content {
+    max-width: 1100px;
+    margin: auto;
+    padding: 45px 5%;
+}
+
+section {
+    scroll-margin-top: 25px;
+    margin-bottom: 65px;
+}
+
+.section-label {
+    color: var(--green2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+h2 {
+    color: var(--green);
+    font-size: 29px;
+    margin: 10px 0 20px;
+}
+
+h3 {
+    color: var(--green2);
+    margin: 24px 0 10px;
+    font-size: 19px;
+}
+
+p {
+    margin-bottom: 13px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 17px;
+    margin: 25px 0;
+}
+
+.card {
+    background: white;
+    padding: 23px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.card .number {
+    color: var(--gold);
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.card h3 {
+    margin-top: 5px;
+}
+
+.info {
+    background: #e8f0e9;
+    border-left: 4px solid var(--green2);
+    padding: 20px;
+    margin: 22px 0;
+    border-radius: 5px;
+}
+
+.warning {
+    background: #fff4df;
+    border-left: 4px solid var(--gold);
+    padding: 20px;
+    margin: 22px 0;
+    border-radius: 5px;
+}
+
+.formula {
+    background: #183c32;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+}
+
+th, td {
+    padding: 13px;
+    border: 1px solid var(--border);
+    text-align: left;
+}
+
+th {
+    background: var(--green);
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #f3f6f3;
+}
+
+/* SIMULATEUR */
+
+.simulator {
+    background: white;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 25px 0;
+}
+
+.simulator label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 5px;
+}
+
+.simulator input[type="range"] {
+    width: 100%;
+    accent-color: var(--green2);
+}
+
+.sim-results {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 22px;
+}
+
+.result {
+    background: var(--cream);
+    padding: 17px;
+    border-radius: 7px;
+}
+
+.result strong {
+    display: block;
+    color: var(--green);
+    font-size: 23px;
+}
+
+.bar-container {
+    background: #e5e9e5;
+    height: 17px;
+    border-radius: 20px;
+    margin: 12px 0;
+    overflow: hidden;
+}
+
+.bar {
+    background: var(--green2);
+    height: 100%;
+    width: 0%;
+    transition: .3s;
+}
+
+/* QUIZ */
+
+.quiz {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.question {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.question label {
+    display: block;
+    padding: 9px;
+    cursor: pointer;
+}
+
+.quiz button {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.feedback {
+    margin-top: 12px;
+    padding: 12px;
+    background: #e8f0e9;
+    display: none;
+}
+
+.source-list li {
+    margin: 12px 0 12px 20px;
+}
+
+footer {
+    background: var(--green);
+    color: white;
+    padding: 35px;
+    text-align: center;
+}
+
+footer p {
+    color: #d1dfd7;
+}
+
+/* VERSION MOBILE */
+
+@media(max-width: 850px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .topbar {
+        padding-left: 75px;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sim-results {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        padding: 90px 7% 55px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<button class="mobile-menu" onclick="toggleMenu()">☰ Menu</button>
+
+<!-- MENU LATERAL -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        FÉDÉRATION <span>WA</span>
+        <small>ACADÉMIE ÉCONOMIQUE</small>
+    </div>
+
+    <div class="nav-title">Plateforme</div>
+    <a href="#accueil" onclick="closeMenu()">⌂ Accueil</a>
+    <a href="#vision" onclick="closeMenu()">Notre vision</a>
+    <a href="#objectifs" onclick="closeMenu()">Objectifs du projet</a>
+
+    <div class="nav-title">Programme économique</div>
+    <a href="#integration" onclick="closeMenu()">L'intégration économique</a>
+    <a href="#commerce" onclick="closeMenu()">Libre circulation</a>
+    <a href="#barrieres" onclick="closeMenu()">3.1. Barrières commerciales</a>
+    <a href="#fiscalite" onclick="closeMenu()">Fiscalité et budget</a>
+    <a href="#normes" onclick="closeMenu()">Normes communes</a>
+    <a href="#origine" onclick="closeMenu()">Règles d'origine</a>
+
+    <div class="nav-title">Travaux pratiques</div>
+    <a href="#simulateur" onclick="closeMenu()">Simulateur économique</a>
+    <a href="#etude" onclick="closeMenu()">Étude de cas</a>
+    <a href="#quiz" onclick="closeMenu()">Évaluation</a>
+
+    <div class="nav-title">Documentation</div>
+    <a href="#sources" onclick="closeMenu()">Sources et références</a>
+
+</aside>
+
+<div class="main">
+
+<div class="topbar">
+    <strong>Académie économique ouest-africaine</strong>
+    <span>Projet pédagogique indépendant</span>
+</div>
+
+<!-- ACCUEIL -->
+
+<header class="hero" id="accueil">
+    <div class="tag">Économie • Intégration • Développement</div>
+
+    <h1>Construire ensemble une nouvelle ambition ouest-africaine</h1>
+
+    <p>
+        Comprendre les mécanismes économiques, étudier les politiques
+        publiques et réfléchir aux institutions nécessaires à la
+        construction progressive d'un espace économique commun.
+    </p>
+
+    <a class="hero-button" href="#vision">
+        Découvrir le projet →
+    </a>
+</header>
+
+<div class="content">
+
+<!-- VISION -->
+
+<section id="vision">
+    <div class="section-label">01 — Notre ambition</div>
+    <h2>Une vision pour l'Afrique de l'Ouest</h2>
+
+    <p>
+        L'Afrique de l'Ouest possède d'importantes ressources humaines,
+        agricoles, minières, énergétiques et économiques. Pourtant,
+        les échanges entre les pays restent confrontés à des obstacles
+        commerciaux, administratifs et institutionnels.
+    </p>
+
+    <p>
+        Notre projet consiste à réfléchir à la construction progressive
+        d'une fédération ouest-africaine. Cette transformation commencerait
+        par une intégration économique renforcée, avant d'envisager
+        une convergence institutionnelle et politique.
+    </p>
+
+    <div class="info">
+        <strong>Principe fondamental :</strong>
+        l'intégration ne doit pas être une simple suppression des frontières.
+        Elle doit permettre d'améliorer les conditions de production,
+        les échanges, l'emploi et le bien-être des populations.
+    </div>
+</section>
+
+<!-- OBJECTIFS -->
+
+<section id="objectifs">
+    <div class="section-label">02 — Les objectifs</div>
+    <h2>Les fondements de notre projet</h2>
+
+    <div class="card-grid">
+
+        <div class="card">
+            <div class="number">01</div>
+            <h3>Intégration économique</h3>
+            <p>
+                Construire un marché régional dans lequel les biens,
+                les services et les facteurs de production circulent
+                progressivement plus librement.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">02</div>
+            <h3>Solidarité budgétaire</h3>
+            <p>
+                Mettre en place des mécanismes de coopération financière
+                afin de réduire les écarts de développement entre
+                les régions.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">03</div>
+            <h3>Convergence institutionnelle</h3>
+            <p>
+                Construire des institutions communes responsables,
+                démocratiques et transparentes, tout en respectant
+                une transition progressive.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- INTEGRATION -->
+
+<section id="integration">
+    <div class="section-label">03 — Fondements économiques</div>
+    <h2>Comprendre l'intégration économique</h2>
+
+    <h3>3.1. Qu'est-ce que l'intégration économique ?</h3>
+
+    <p>
+        L'intégration économique désigne le processus par lequel
+        plusieurs économies nationales réduisent progressivement
+        les obstacles qui entravent leurs échanges et coordonnent
+        certaines de leurs politiques économiques.
+    </p>
+
+    <p>
+        L'objectif est de créer un espace économique plus vaste,
+        plus cohérent et plus efficace.
+    </p>
+
+    <h3>Les différentes étapes de l'intégration</h3>
+
+    <table>
+        <tr>
+            <th>Étape</th>
+            <th>Caractéristiques</th>
+        </tr>
+        <tr>
+            <td>Zone de libre-échange</td>
+            <td>Suppression des droits de douane entre les membres.</td>
+        </tr>
+        <tr>
+            <td>Union douanière</td>
+            <td>Libre-échange interne et tarif extérieur commun.</td>
+        </tr>
+        <tr>
+            <td>Marché commun</td>
+            <td>Libre circulation des biens, services, capitaux et personnes.</td>
+        </tr>
+        <tr>
+            <td>Union économique</td>
+            <td>Coordination et harmonisation de certaines politiques économiques.</td>
+        </tr>
+        <tr>
+            <td>Union économique et monétaire</td>
+            <td>Coordination économique approfondie et monnaie commune.</td>
+        </tr>
+        <tr>
+            <td>Union politique ou fédération</td>
+            <td>Institutions politiques communes et partage constitutionnel des compétences.</td>
+        </tr>
+    </table>
+
+    <div class="warning">
+        Ces étapes constituent une présentation pédagogique classique.
+        Dans la réalité, les formes d'intégration peuvent se chevaucher
+        et ne suivent pas nécessairement un ordre mécanique.
+    </div>
+</section>
+
+<!-- LIBRE CIRCULATION -->
+
+<section id="commerce">
+    <div class="section-label">04 — Marché intérieur</div>
+    <h2>La libre circulation des marchandises</h2>
+
+    <p>
+        Dans un espace économique intégré, les entreprises doivent
+        pouvoir vendre leurs produits dans les autres régions membres
+        sans subir des obstacles commerciaux injustifiés.
+    </p>
+
+    <p>
+        Un produit originaire du Togo qui satisfait aux règles d'origine
+        communes doit pouvoir accéder au marché béninois ou ghanéen
+        sans être soumis à un droit de douane interne.
+    </p>
+
+    <div class="info">
+        La libre circulation ne signifie pas l'absence de réglementation.
+        Les règles sanitaires, phytosanitaires, environnementales
+        et de sécurité restent nécessaires.
+    </div>
+</section>
+
+<!-- COURS PRINCIPAL -->
+
+<section id="barrieres">
+    <div class="section-label">05 — Cours approfondi</div>
+
+    <h2>3.1. La suppression des barrières commerciales internes</h2>
+
+    <p>
+        La suppression des barrières commerciales internes constitue
+        une condition essentielle de la création d'un véritable marché
+        régional.
+    </p>
+
+    <p>
+        Elle consiste à éliminer progressivement les mesures qui
+        empêchent ou rendent artificiellement coûteuse la circulation
+        des marchandises entre les États membres.
+    </p>
+
+    <h3>A. Les droits de douane internes</h3>
+
+    <p>
+        Un droit de douane est un prélèvement appliqué à une marchandise
+        lorsqu'elle franchit une frontière douanière.
+    </p>
+
+    <p>
+        Dans notre future union, les produits qui remplissent les
+        conditions d'origine régionale ne devraient plus supporter
+        de droits de douane lors de leur circulation interne.
+    </p>
+
+    <p><strong>Exemple :</strong></p>
+
+    <p>
+        Une entreprise togolaise vend une cargaison de marchandises
+        au Bénin pour 10 millions FCFA. Si un droit de douane interne
+        de 10 % est appliqué, le prélèvement est de :
+    </p>
+
+    <div class="formula">
+        10 000 000 × 10 % = 1 000 000 FCFA
+    </div>
+
+    <p>
+        Le coût de la marchandise augmente donc de 1 million FCFA,
+        avant même de prendre en compte les autres frais commerciaux.
+    </p>
+
+    <h3>B. Les quotas et restrictions quantitatives</h3>
+
+    <p>
+        Un quota fixe une quantité maximale de marchandises pouvant
+        être importées sur une période donnée.
+    </p>
+
+    <p>
+        Exemple : un pays autorise l'entrée de seulement 5 000 tonnes
+        de maïs provenant d'une autre région, alors que les producteurs
+        peuvent en fournir 10 000 tonnes.
+    </p>
+
+    <p>
+        Cette restriction limite les débouchés des producteurs,
+        réduit l'offre disponible et peut exercer une pression
+        à la hausse sur les prix.
+    </p>
+
+    <h3>C. Les contrôles redondants aux frontières</h3>
+
+    <p>
+        Un camion qui traverse plusieurs territoires peut subir
+        des vérifications administratives répétitives.
+    </p>
+
+    <p>
+        Chaque attente peut entraîner des coûts : carburant,
+        rémunération du chauffeur, immobilisation du véhicule,
+        dégradation des produits périssables et frais de stockage.
+    </p>
+
+    <p>
+        L'objectif est de mettre en place des procédures coordonnées,
+        des documents communs et des systèmes numériques interconnectés.
+    </p>
+
+    <h3>D. Les formalités administratives inutiles</h3>
+
+    <p>
+        La multiplication des autorisations, certificats et documents
+        peut constituer un obstacle au commerce, même en l'absence
+        de droits de douane.
+    </p>
+
+    <p>
+        La simplification administrative doit donc devenir une priorité.
+        Les documents reconnus par une administration compétente
+        devraient être acceptés dans les autres territoires selon
+        les règles communes.
+    </p>
+
+    <h3>E. Les discriminations fiscales</h3>
+
+    <p>
+        Une discrimination fiscale apparaît lorsqu'un produit
+        provenant d'un autre État membre subit une fiscalité
+        moins favorable qu'un produit national comparable.
+    </p>
+
+    <table>
+        <tr>
+            <th>Produit</th>
+            <th>Origine</th>
+            <th>Taxe illustrative</th>
+        </tr>
+        <tr>
+            <td>Ciment</td>
+            <td>Production locale</td>
+            <td>10 %</td>
+        </tr>
+        <tr>
+            <td>Ciment</td>
+            <td>Autre région membre</td>
+            <td>20 %</td>
+        </tr>
+    </table>
+
+    <p>
+        Ce type de différence peut protéger artificiellement
+        les producteurs locaux et fausser la concurrence.
+    </p>
+
+    <div class="warning">
+        La suppression des discriminations fiscales ne signifie pas
+        que tous les impôts doivent être identiques immédiatement.
+        Il faut distinguer la neutralité fiscale entre produits
+        comparables et l'harmonisation complète des systèmes fiscaux.
+    </div>
+
+    <h3>F. Les effets économiques attendus</h3>
+
+    <div class="card-grid">
+
+        <div class="card">
+            <h3>Réduction des coûts</h3>
+            <p>
+                La diminution des frais douaniers et administratifs
+                facilite l'approvisionnement des entreprises.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Concurrence</h3>
+            <p>
+                Les entreprises sont davantage incitées à améliorer
+                leur productivité et leur qualité.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Économies d'échelle</h3>
+            <p>
+                L'élargissement des débouchés peut permettre
+                d'augmenter les quantités produites et de réduire
+                les coûts moyens.
+            </p>
+        </div>
+
+    </div>
+
+    <h3>G. Les conséquences sur le bien-être</h3>
+
+    <p>
+        Les consommateurs peuvent bénéficier d'un choix plus large,
+        d'une meilleure disponibilité des marchandises et,
+        lorsque les gains de coûts sont transmis aux prix,
+        d'une amélioration de leur pouvoir d'achat.
+    </p>
+
+    <p>
+        Toutefois, certaines entreprises moins compétitives peuvent
+        perdre des parts de marché. L'intégration doit donc
+        s'accompagner de politiques de formation, d'investissement
+        et d'accompagnement productif.
+    </p>
+
+</section>
+
+<!-- FISCALITE -->
+
+<section id="fiscalite">
+    <div class="section-label">06 — Finances publiques</div>
+    <h2>Les conséquences budgétaires de la réforme</h2>
+
+    <p>
+        Les droits de douane représentent une source de recettes
+        publiques pour les États. Leur suppression sur les échanges
+        internes peut donc créer des pertes budgétaires.
+    </p>
+
+    <h3>Exemple de calcul</h3>
+
+    <p>
+        Supposons qu'un État importe annuellement pour 100 milliards
+        FCFA de marchandises provenant des autres membres de l'union.
+        Le droit de douane moyen est de 5 %.
+    </p>
+
+    <div class="formula">
+        100 milliards × 5 % = 5 milliards FCFA
+    </div>
+
+    <p>
+        Dans cette simulation simplifiée, la suppression totale
+        de ces droits entraîne une perte potentielle de 5 milliards
+        FCFA de recettes douanières.
+    </p>
+
+    <h3>Comment compenser cette perte ?</h3>
+
+    <p>
+        Premièrement, les administrations fiscales peuvent améliorer
+        la collecte des impôts existants et réduire la fraude.
+    </p>
+
+    <p>
+        Deuxièmement, un fonds de compensation temporaire peut aider
+        les régions les plus exposées aux pertes de recettes.
+    </p>
+
+    <p>
+        Troisièmement, une harmonisation fiscale progressive peut
+        limiter les distorsions entre les territoires.
+    </p>
+
+    <p>
+        Enfin, l'élargissement de l'activité économique peut,
+        à terme, élargir certaines bases fiscales. Ce gain n'est
+        cependant ni immédiat ni garanti.
+    </p>
+
+    <div class="info">
+        Attention : la suppression des droits de douane internes
+        n'entraîne pas automatiquement la suppression de la TVA.
+        Les deux prélèvements ont des fonctions et des régimes
+        juridiques distincts.
+    </div>
+</section>
+
+<!-- NORMES -->
+
+<section id="normes">
+    <div class="section-label">07 — Réglementation</div>
+    <h2>Les normes sanitaires et techniques communes</h2>
+
+    <p>
+        La libre circulation ne doit pas mettre en danger
+        la santé des populations ni la sécurité des consommateurs.
+    </p>
+
+    <h3>Contrôles sanitaires</h3>
+
+    <p>
+        Ils permettent de vérifier que les aliments et autres
+        produits ne présentent pas de risques sanitaires.
+    </p>
+
+    <h3>Contrôles phytosanitaires</h3>
+
+    <p>
+        Ils visent à prévenir la propagation de maladies
+        et de parasites affectant les végétaux.
+    </p>
+
+    <h3>Normes techniques et de qualité</h3>
+
+    <p>
+        Elles garantissent que les produits respectent des exigences
+        communes de sécurité, de fabrication et d'information
+        des consommateurs.
+    </p>
+
+    <div class="info">
+        Une mesure sanitaire doit être fondée sur un risque réel,
+        transparente, proportionnée et appliquée sans discrimination
+        arbitraire.
+    </div>
+</section>
+
+<!-- ORIGINE -->
+
+<section id="origine">
+    <div class="section-label">08 — Politique commerciale</div>
+    <h2>Les règles d'origine</h2>
+
+    <p>
+        Les règles d'origine permettent de déterminer si une
+        marchandise peut bénéficier des préférences commerciales
+        réservées aux produits originaires de l'union.
+    </p>
+
+    <p>
+        Un produit fabriqué au Togo à partir de matières premières
+        étrangères peut éventuellement être considéré comme originaire
+        de l'union s'il respecte les critères de transformation
+        prévus par les règles communes.
+    </p>
+
+    <p>
+        À l'inverse, une marchandise fabriquée en Chine et simplement
+        réexportée depuis le Togo ne devient pas automatiquement
+        un produit d'origine ouest-africaine.
+    </p>
+
+    <div class="warning">
+        Les règles d'origine sont indispensables pour empêcher
+        le contournement du tarif extérieur commun.
+    </div>
+</section>
+
+<!-- SIMULATEUR -->
+
+<section id="simulateur">
+    <div class="section-label">09 — Travaux pratiques</div>
+    <h2>Simulateur de droits de douane</h2>
+
+    <p>
+        Modifie les paramètres ci-dessous pour observer comment
+        un droit de douane influence le coût d'une importation.
+    </p>
+
+    <div class="simulator">
+
+        <label for="montant">Valeur de la marchandise (FCFA)</label>
+        <input type="range" id="montant"
+            min="1000000" max="100000000" step="1000000"
+            value="10000000">
+
+        <strong id="montantValeur">10 000 000 FCFA</strong>
+
+        <label for="taux">Taux du droit de douane (%)</label>
+        <input type="range" id="taux"
+            min="0" max="30" step="1" value="10">
+
+        <strong id="tauxValeur">10 %</strong>
+
+        <div class="sim-results">
+
+            <div class="result">
+                Droit de douane
+                <strong id="droit">1 000 000 FCFA</strong>
+            </div>
+
+            <div class="result">
+                Coût après droit
+                <strong id="total">11 000 000 FCFA</strong>
+            </div>
+
+            <div class="result">
+                Coût après suppression
+                <strong id="sansDroit">10 000 000 FCFA</strong>
+            </div>
+
+            <div class="result">
+                Économie potentielle
+                <strong id="economie">1 000 000 FCFA</strong>
+            </div>
+
+        </div>
+
+        <h3>Comparaison des coûts</h3>
+
+        <p>Avec le droit de douane</p>
+        <div class="bar-container">
+            <div class="bar" id="barAvec"></div>
+        </div>
+
+        <p>Sans le droit de douane</p>
+        <div class="bar-container">
+            <div class="bar" id="barSans"></div>
+        </div>
+
+        <div class="info">
+            Ce simulateur présente un modèle simplifié.
+            Il ne tient pas compte du transport, de la TVA,
+            des autres prélèvements ni des éventuels changements
+            de comportement des entreprises.
+        </div>
+    </div>
+</section>
+
+<!-- ETUDE DE CAS -->
+
+<section id="etude">
+    <div class="section-label">10 — Application économique</div>
+    <h2>Étude de cas : commerce du riz</h2>
+
+    <p>
+        Une entreprise togolaise souhaite commercialiser
+        100 tonnes de riz au Bénin.
+    </p>
+
+    <h3>Situation avant la réforme</h3>
+
+    <table>
+        <tr>
+            <th>Éléments</th>
+            <th>Montant</th>
+        </tr>
+        <tr>
+            <td>Production et achat</td>
+            <td>40 000 000 FCFA</td>
+        </tr>
+        <tr>
+            <td>Droit de douane</td>
+            <td>2 000 000 FCFA</td>
+        </tr>
+        <tr>
+            <td>Formalités et contrôles</td>
+            <td>500 000 FCFA</td>
+        </tr>
+        <tr>
+            <td>Transport</td>
+            <td>1 500 000 FCFA</td>
+        </tr>
+        <tr>
+            <th>Coût total</th>
+            <th>44 000 000 FCFA</th>
+        </tr>
+    </table>
+
+    <h3>Situation après la réforme</h3>
+
+    <table>
+        <tr>
+            <th>Éléments</th>
+            <th>Montant</th>
+        </tr>
+        <tr>
+            <td>Production et achat</td>
+            <td>40 000 000 FCFA</td>
+        </tr>
+        <tr>
+            <td>Droit de douane interne</td>
+            <td>0 FCFA</td>
+        </tr>
+        <tr>
+            <td>Formalités harmonisées</td>
+            <td>100 000 FCFA</td>
+        </tr>
+        <tr>
+            <td>Transport</td>
+            <td>1 500 000 FCFA</td>
+        </tr>
+        <tr>
+            <th>Coût total</th>
+            <th>41 600 000 FCFA</th>
+        </tr>
+    </table>
+
+    <div class="formula">
+        Économie = 44 000 000 − 41 600 000
+        = 2 400 000 FCFA
+    </div>
+
+    <p>
+        Le taux de réduction du coût total est :
+    </p>
+
+    <div class="formula">
+        (2 400 000 / 44 000 000) × 100
+        = 5,45 %
+    </div>
+
+    <p>
+        L'entreprise réalise donc une économie de 2,4 millions FCFA,
+        soit une diminution de 5,45 % de son coût total dans
+        les hypothèses retenues.
+    </p>
+
+    <div class="warning">
+        Les chiffres de cette étude de cas sont fictifs.
+        Ils servent uniquement à apprendre les calculs économiques.
+        Ils ne représentent pas les tarifs réellement appliqués
+        entre le Togo et le Bénin.
+    </div>
+</section>
+
+<!-- QUIZ -->
+
+<section id="quiz">
+    <div class="section-label">11 — Évaluation</div>
+    <h2>Teste tes connaissances</h2>
+
+    <p>
+        Réponds aux cinq questions suivantes pour vérifier
+        ta compréhension du cours.
+    </p>
+
+    <div class="quiz" id="quizBox">
+
+        <div class="question">
+            <strong>1. Quel est l'objectif principal de la suppression
+            des barrières commerciales internes ?</strong>
+
+            <label>
+                <input type="radio" name="q1" value="a">
+                Augmenter les droits de douane.
+            </label>
+
+            <label>
+                <input type="radio" name="q1" value="b">
+                Faciliter la circulation des marchandises.
+            </label>
+
+            <label>
+                <input type="radio" name="q1" value="c">
+                Supprimer tous les impôts.
+            </label>
+
+            <div class="feedback" id="f1">
+                Bonne réponse : B. La réforme vise à faciliter
+                les échanges entre les membres.
+            </div>
+        </div>
+
+        <div class="question">
+            <strong>2. Un quota commercial est :</strong>
+
+            <label>
+                <input type="radio" name="q2" value="a">
+                Une limitation quantitative des importations.
+            </label>
+
+            <label>
+                <input type="radio" name="q2" value="b">
+                Une taxe sur les bénéfices.
+            </label>
+
+            <label>
+                <input type="radio" name="q2" value="c">
+                Une subvention à l'exportation.
+            </label>
+
+            <div class="feedback" id="f2">
+                Bonne réponse : A. Le quota limite la quantité
+                pouvant être importée.
+            </div>
+        </div>
+
+        <div class="question">
+            <strong>3. La suppression des droits de douane internes
+            entraîne-t-elle automatiquement la suppression de la TVA ?</strong>
+
+            <label>
+                <input type="radio" name="q3" value="a">
+                Oui, toujours.
+            </label>
+
+            <label>
+                <input type="radio" name="q3" value="b">
+                Non, ce sont deux prélèvements distincts.
+            </label>
+
+            <label>
+                <input type="radio" name="q3" value="c">
+                Uniquement pour les entreprises.
+            </label>
+
+            <div class="feedback" id="f3">
+                Bonne réponse : B. La TVA peut rester applicable
+                selon les règles fiscales communes.
+            </div>
+        </div>
+
+        <div class="question">
+            <strong>4. Pourquoi harmoniser les normes sanitaires ?</strong>
+
+            <label>
+                <input type="radio" name="q4" value="a">
+                Pour supprimer les contrôles de sécurité.
+            </label>
+
+            <label>
+                <input type="radio" name="q4" value="b">
+                Pour protéger les consommateurs avec des règles communes.
+            </label>
+
+            <label>
+                <input type="radio" name="q4" value="c">
+                Pour empêcher la concurrence.
+            </label>
+
+            <div class="feedback" id="f4">
+                Bonne réponse : B. Les normes communes protègent
+                la santé et facilitent la reconnaissance des contrôles.
+            </div>
+        </div>
+
+        <div class="question">
+            <strong>5. À quoi servent les règles d'origine ?</strong>
+
+            <label>
+                <input type="radio" name="q5" value="a">
+                À déterminer l'origine d'une marchandise
+                pour les préférences commerciales.
+            </label>
+
+            <label>
+                <input type="radio" name="q5" value="b">
+                À fixer le salaire des producteurs.
+            </label>
+
+            <label>
+                <input type="radio" name="q5" value="c">
+                À déterminer le prix du transport.
+            </label>
+
+            <div class="feedback" id="f5">
+                Bonne réponse : A. Elles déterminent l'éligibilité
+                d'un produit aux avantages commerciaux.
+            </div>
+        </div>
+
+        <button onclick="corrigerQuiz()">Corriger mes réponses</button>
+
+        <h3 id="score"></h3>
+
+    </div>
+</section>
+
+<!-- SOURCES -->
+
+<section id="sources">
+    <div class="section-label">12 — Documentation</div>
+    <h2>Sources et références institutionnelles</h2>
+
+    <p>
+        Les références suivantes permettent d'approfondir les
+        principes juridiques et économiques présentés dans ce cours.
+    </p>
+
+    <ul class="source-list">
+
+        <li>
+            <strong>CEDEAO :</strong>
+            <a href="https://www.ecowas.int/" target="_blank">
+                Site officiel de la Communauté économique des États
+                de l'Afrique de l'Ouest.
+            </a>
+        </li>
+
+        <li>
+            <strong>Union africaine :</strong>
+            <a href="https://au.int/" target="_blank">
+                Documents et institutions de l'Union africaine.
+            </a>
+        </li>
+
+        <li>
+            <strong>ZLECAf :</strong>
+            <a href="https://au-afcfta.org/" target="_blank">
+                Secrétariat de la Zone de libre-échange continentale africaine.
+            </a>
+        </li>
+
+        <li>
+            <strong>Organisation mondiale du commerce :</strong>
+            <a href="https://www.wto.org/" target="_blank">
+                Accords commerciaux, tarifs douaniers et règles d'origine.
+            </a>
+        </li>
+
+        <li>
+            <strong>CNUCED :</strong>
+            <a href="https://unctad.org/" target="_blank">
+                Commerce international, développement et mesures non tarifaires.
+            </a>
+        </li>
+
+    </ul>
+
+    <div class="warning">
+        Cette page est un support pédagogique indépendant.
+        Les exemples chiffrés sont des simulations et les propositions
+        institutionnelles présentées ne constituent pas des décisions
+        officielles des États ouest-africains.
+    </div>
+</section>
+
+</div>
+
+<footer>
+    <h3 style="color:white">FÉDÉRATION OUEST-AFRICAINE</h3>
+
+    <p>
+        Apprendre l'économie pour comprendre et construire l'avenir.
+    </p>
+
+    <p>
+        Plateforme pédagogique indépendante • 2026
+    </p>
+</footer>
+
+</div>
+
+<script>
+
+/* MENU MOBILE */
+
+function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("open");
+}
+
+function closeMenu() {
+    document.getElementById("sidebar").classList.remove("open");
+}
+
+/* SIMULATEUR ECONOMIQUE */
+
+const montant = document.getElementById("montant");
+const taux = document.getElementById("taux");
+
+function formater(nombre) {
+    return Math.round(nombre).toLocaleString("fr-FR") + " FCFA";
+}
+
+function calculer() {
+
+    const valeur = Number(montant.value);
+    const pourcentage = Number(taux.value);
+
+    const droit = valeur * pourcentage / 100;
+    const total = valeur + droit;
+
+    document.getElementById("montantValeur").textContent =
+        formater(valeur);
+
+    document.getElementById("tauxValeur").textContent =
+        pourcentage + " %";
+
+    document.getElementById("droit").textContent =
+        formater(droit);
+
+    document.getElementById("total").textContent =
+        formater(total);
+
+    document.getElementById("sansDroit").textContent =
+        formater(valeur);
+
+    document.getElementById("economie").textContent =
+        formater(droit);
+
+    const maximum = 130000000;
+
+    document.getElementById("barAvec").style.width =
+        (total / maximum * 100) + "%";
+
+    document.getElementById("barSans").style.width =
+        (valeur / maximum * 100) + "%";
+}
+
+montant.addEventListener("input", calculer);
+taux.addEventListener("input", calculer);
+
+calculer();
+
+/* CORRECTION DU QUIZ */
+
+function corrigerQuiz() {
+
+    const reponses = {
+        q1: "b",
+        q2: "a",
+        q3: "b",
+        q4: "b",
+        q5: "a"
+    };
+
+    let score = 0;
+
+    for (let question in reponses) {
+
+        const selection =
+            document.querySelector(
+                'input[name="' + question + '"]:checked'
+            );
+
+        const numero = question.substring(1);
+
+        const feedback =
+            document.getElementById("f" + numero);
+
+        feedback.style.display = "block";
+
+        if (selection && selection.value === reponses[question]) {
+            score++;
+            feedback.style.background = "#e3f3e6";
+            feedback.textContent = "✓ Bonne réponse ! " +
+                feedback.textContent;
+        } else {
+            feedback.style.background = "#fff0eb";
+            feedback.textContent = "✗ Réponse incorrecte. " +
+                feedback.textContent;
+        }
+    }
+
+    document.getElementById("score").textContent =
+        "Ton résultat : " + score + " / 5";
+
+}
+
+</script>
+
+</body>
+</html>
