@@ -1,12 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dette publique & Développement | Laboratoire économique</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
@@ -110,6 +107,7 @@ h3 {font-size:18px}
   border:1px solid var(--border);
   border-radius:10px;
   padding:17px;
+  margin:6px 0;
 }
 
 .metric small {color:var(--muted)}
@@ -181,6 +179,12 @@ button.secondary {
   margin:20px 0;
 }
 
+.chart-container canvas {
+  display:block;
+  width:100%;
+  height:100%;
+}
+
 table {
   width:100%;
   border-collapse:collapse;
@@ -207,6 +211,8 @@ th {background:#edf3ff}
   margin:14px 0;
 }
 
+.explain p {margin:6px 0}
+
 .warning {
   background:#fff6e9;
   border-left:4px solid var(--orange);
@@ -225,20 +231,44 @@ th {background:#edf3ff}
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:7px;
+  gap:4px;
   margin:20px 0;
 }
 
 .node {
-  padding:14px;
+  padding:14px 16px;
   border:1px solid #b7c9e7;
   background:#edf3ff;
   border-radius:8px;
   text-align:center;
   width:min(100%,500px);
+  font-weight:bold;
+  color:#17243a;
 }
 
-.arrow {font-size:23px;color:var(--blue)}
+.node span {
+  display:inline-block;
+  width:24px;
+  height:24px;
+  line-height:24px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  font-size:13px;
+  margin-right:8px;
+}
+
+.node.last {
+  background:#e3f4ec;
+  border-color:#a8d7c2;
+}
+
+.arrow {
+  font-size:23px;
+  color:var(--blue);
+  line-height:1;
+  user-select:none;
+}
 
 footer {
   background:#102b50;
@@ -550,6 +580,7 @@ constante et applique une dépréciation annuelle uniforme.
 <strong id="serviceBurden">--</strong>
 </div>
 </div>
+</div>
 
 <div class="card">
 <h3>3.2. Trajectoire de la dette</h3>
@@ -619,6 +650,7 @@ scénario favorable et scénario de stress.
 
 <div class="card">
 <h3>4.1. Hypothèses des scénarios</h3>
+<div class="table-scroll">
 <table>
 <thead>
 <tr><th>Paramètre</th><th>Référence</th><th>Favorable</th><th>Stress</th></tr>
@@ -629,6 +661,7 @@ scénario favorable et scénario de stress.
 <tr><td>Déficit primaire</td><td>Valeur choisie</td><td>−0,5 point</td><td>+1 point</td></tr>
 </tbody>
 </table>
+</div>
 <p class="muted">Les hypothèses favorables et défavorables sont des chocs pédagogiques, pas des prévisions.</p>
 </div>
 
@@ -857,17 +890,17 @@ estimée et à un modèle statistique donné.
 <h3>7.2. Pourquoi l'efficacité influence-t-elle la dette ?</h3>
 
 <div class="diagram">
-<div class="node">Emprunt public</div>
+<div class="node"><span>1</span>Emprunt public</div>
 <div class="arrow">↓</div>
-<div class="node">Investissement public</div>
+<div class="node"><span>2</span>Investissement public</div>
 <div class="arrow">↓</div>
-<div class="node">Infrastructure et services publics</div>
+<div class="node"><span>3</span>Infrastructure et services publics</div>
 <div class="arrow">↓</div>
-<div class="node">Productivité et activité économique</div>
+<div class="node"><span>4</span>Productivité et activité économique</div>
 <div class="arrow">↓</div>
-<div class="node">Élargissement potentiel des recettes fiscales</div>
+<div class="node"><span>5</span>Élargissement potentiel des recettes fiscales</div>
 <div class="arrow">↓</div>
-<div class="node">Capacité de remboursement</div>
+<div class="node last"><span>6</span>Capacité de remboursement</div>
 </div>
 
 <p>
@@ -982,7 +1015,7 @@ leur période et leur périmètre.
 <footer>
 <h3>Dette publique & Développement</h3>
 <p>Un laboratoire pédagogique d'économie publique et de macroéconomie appliquée.</p>
-<p>Projet d'apprentissage universitaire — Version 1.0</p>
+<p>Projet d'apprentissage universitaire — Version 1.1</p>
 <p>Les simulations sont illustratives et ne constituent pas des prévisions économiques.</p>
 </footer>
 
@@ -1011,27 +1044,30 @@ function money(x) {
   });
 }
 
-function bindControls() {
-  ids.forEach(id => {
-    const range = document.getElementById(id);
-    const number = document.getElementById(id+"N");
+// Lie un curseur et son champ numérique ; "callback" est appelé à chaque changement.
+function bindPair(id, callback) {
 
-    range.addEventListener("input", () => {
-      number.value = range.value;
-      update();
-    });
+  const range = document.getElementById(id);
+  const number = document.getElementById(id+"N");
 
-    number.addEventListener("input", () => {
-      const n = Number(number.value);
-      if (number.value !== "" &&
-          n >= Number(range.min) &&
-          n <= Number(range.max)) {
-        range.value = n;
-        update();
-      }
-    });
+  range.addEventListener("input", () => {
+    number.value = range.value;
+    callback();
   });
 
+  number.addEventListener("input", () => {
+    const n = Number(number.value);
+    if (number.value !== "" &&
+        n >= Number(range.min) &&
+        n <= Number(range.max)) {
+      range.value = n;
+      callback();
+    }
+  });
+}
+
+function bindControls() {
+  ids.forEach(id => bindPair(id, update));
   document.getElementById("horizon")
     .addEventListener("change", update);
 }
@@ -1070,6 +1106,7 @@ function simulate(p) {
     interest:0,
     primary:0,
     service:0,
+    serviceRatio:null,
     snowball:0,
     primaryEffect:0,
     sfaEffect:0,
@@ -1088,14 +1125,11 @@ function simulate(p) {
     gdp = previousGDP*(1+p.growth);
 
     const interestCost = previousDebt*p.interest;
-
     const primaryDeficit = gdp*p.deficit;
-
     const stockFlow = gdp*p.sfa;
 
     // Réévaluation approximative de la dette en devises.
-    const fxAdjustment =
-      previousDebt*p.fxShare*p.depreciation;
+    const fxAdjustment = previousDebt*p.fxShare*p.depreciation;
 
     debt =
       previousDebt +
@@ -1106,25 +1140,20 @@ function simulate(p) {
 
     const ratio = debt/gdp;
 
+    // Effet boule de neige : [(i - g)/(1 + g)] × d(t-1)
     const snowball =
-      previousDebt/gdp*p.interest -
-      (previousDebt/gdp*p.growth);
+      (p.interest-p.growth)/(1+p.growth)*(previousDebt/previousGDP);
 
     const primaryEffect = p.deficit;
     const sfaEffect = p.sfa;
     const fxEffect = fxAdjustment/gdp;
 
-    // Amortissement du principal :
-    // il représente une échéance brute de trésorerie,
+    // Amortissement du principal : échéance brute de trésorerie,
     // et non une augmentation automatique de la dette nette.
     const principalDue = previousDebt*p.amortization;
-
     const grossService = interestCost + principalDue;
-
     const revenue = gdp*p.revenue;
-
-    const serviceRatio =
-      revenue>0 ? grossService/revenue : null;
+    const serviceRatio = revenue>0 ? grossService/revenue : null;
 
     rows.push({
       year:t,
@@ -1146,116 +1175,302 @@ function simulate(p) {
 }
 
 // ==========================================
-// 3. CREATION DES GRAPHIQUES
+// 3. MOTEUR DE GRAPHIQUES (canvas, sans dépendance)
 // ==========================================
 
-let debtChart;
-let nominalChart;
-let componentsChart;
-let scenarioChart;
-
-function chartOptions(title,unit="%") {
-  return {
-    responsive:true,
-    maintainAspectRatio:false,
-    interaction:{mode:"index",intersect:false},
-    plugins:{
-      legend:{position:"bottom"},
-      title:{display:true,text:title},
-      tooltip:{
-        callbacks:{
-          label:ctx =>
-            ctx.dataset.label+": "+
-            Number(ctx.raw).toFixed(2)+
-            (unit==="%"?" %":"")
-        }
-      }
-    },
-    scales:{
-      y:{
-        beginAtZero:false,
-        ticks:{
-          callback:v=>v+(unit==="%"?" %":"")
-        }
-      }
-    }
-  };
+function niceStep(x) {
+  if (x <= 0) return 1;
+  const exp = Math.pow(10, Math.floor(Math.log10(x)));
+  const f = x / exp;
+  const nf = f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10;
+  return nf * exp;
 }
 
+class MiniChart {
+
+  constructor(canvasId, cfg) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas.getContext("2d");
+    this.cfg = cfg;
+    this.labels = [];
+    this.datasets = [];
+    this.hover = null;
+    this.area = null;
+
+    this.canvas.addEventListener("mousemove", e => this.onMove(e));
+    this.canvas.addEventListener("mouseleave", () => {
+      this.hover = null;
+      this.draw();
+    });
+    this.canvas.addEventListener("touchmove", e => {
+      if (e.touches.length) this.onMove(e.touches[0]);
+    }, {passive:true});
+
+    window.addEventListener("resize", () => this.draw());
+  }
+
+  setData(labels, datasets) {
+    this.labels = labels;
+    this.datasets = datasets;
+    this.draw();
+  }
+
+  fmt(v) {
+    const d = this.cfg.decimals !== undefined ? this.cfg.decimals : 2;
+    if (this.cfg.unit === "%") return v.toFixed(2) + " %";
+    return v.toLocaleString("fr-FR", {maximumFractionDigits:d});
+  }
+
+  onMove(e) {
+    if (!this.area || !this.labels.length) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const a = this.area;
+    const n = this.labels.length;
+    let idx;
+    if (this.cfg.type === "bar") {
+      idx = Math.floor((x - a.l) / a.w * n);
+    } else {
+      idx = Math.round((x - a.l) / a.w * (n - 1));
+    }
+    idx = Math.max(0, Math.min(n - 1, idx));
+    if (x < a.l - 5 || x > a.l + a.w + 5) idx = null;
+    if (idx !== this.hover) {
+      this.hover = idx;
+      this.draw();
+    }
+  }
+
+  draw() {
+    const c = this.canvas;
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.clientWidth;
+    const H = c.clientHeight;
+    if (!W || !H) return;
+
+    c.width = Math.round(W * dpr);
+    c.height = Math.round(H * dpr);
+
+    const ctx = this.ctx;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = "12px Arial, sans-serif";
+
+    const n = this.labels.length;
+    if (!n || !this.datasets.length) return;
+
+    const isBar = this.cfg.type === "bar";
+
+    // Marges
+    const L = 62, R = 16, T = 34, B = 62;
+    const w = W - L - R;
+    const h = H - T - B;
+    this.area = {l:L, t:T, w, h};
+
+    // Échelle Y
+    let min = Infinity, max = -Infinity;
+    this.datasets.forEach(ds => ds.data.forEach(v => {
+      if (isFinite(v)) {
+        if (v < min) min = v;
+        if (v > max) max = v;
+      }
+    }));
+    if (!isFinite(min)) { min = 0; max = 1; }
+    if (isBar) { min = Math.min(min, 0); max = Math.max(max, 0); }
+    if (max === min) { max = min + 1; }
+    const step = niceStep((max - min) / 5);
+    const yMin = Math.floor(min / step) * step;
+    const yMax = Math.ceil(max / step) * step;
+
+    const yPos = v => T + h - (v - yMin) / (yMax - yMin) * h;
+    const xPos = i => isBar
+      ? L + (i + 0.5) / n * w
+      : L + (n === 1 ? w / 2 : i / (n - 1) * w);
+
+    // Titre
+    ctx.fillStyle = "#17243a";
+    ctx.font = "bold 14px Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.cfg.title, W / 2, 16);
+
+    // Grille + étiquettes Y
+    ctx.font = "12px Arial, sans-serif";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (let v = yMin; v <= yMax + step / 2; v += step) {
+      const y = yPos(v);
+      ctx.strokeStyle = Math.abs(v) < step / 1000 ? "#9aa7ba" : "#e3e8f0";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(L, y);
+      ctx.lineTo(L + w, y);
+      ctx.stroke();
+      ctx.fillStyle = "#68758a";
+      const txt = this.cfg.unit === "%"
+        ? (Math.round(v * 100) / 100) + " %"
+        : v.toLocaleString("fr-FR", {maximumFractionDigits:0});
+      ctx.fillText(txt, L - 8, y);
+    }
+
+    // Étiquettes X
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "#68758a";
+    const every = Math.max(1, Math.ceil(n / 12));
+    for (let i = 0; i < n; i += every) {
+      ctx.fillText(String(this.labels[i]), xPos(i), T + h + 8);
+    }
+    if (this.cfg.xTitle) {
+      ctx.fillText(this.cfg.xTitle, L + w / 2, T + h + 26);
+    }
+
+    // Séries
+    if (isBar) {
+      const groupW = w / n * 0.78;
+      const barW = groupW / this.datasets.length;
+      const zero = yPos(0);
+      this.datasets.forEach((ds, k) => {
+        ctx.fillStyle = ds.color;
+        ds.data.forEach((v, i) => {
+          const x = xPos(i) - groupW / 2 + k * barW;
+          const y = yPos(v);
+          ctx.fillRect(x, Math.min(y, zero), Math.max(barW - 1, 1), Math.abs(zero - y));
+        });
+      });
+    } else {
+      this.datasets.forEach((ds, k) => {
+        // Remplissage
+        if (ds.fill) {
+          ctx.beginPath();
+          ds.data.forEach((v, i) => {
+            const x = xPos(i), y = yPos(v);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          });
+          ctx.lineTo(xPos(n - 1), T + h);
+          ctx.lineTo(xPos(0), T + h);
+          ctx.closePath();
+          ctx.fillStyle = ds.fillColor || "rgba(36,87,167,.1)";
+          ctx.fill();
+        }
+        // Ligne
+        ctx.beginPath();
+        ds.data.forEach((v, i) => {
+          const x = xPos(i), y = yPos(v);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = ds.color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = "round";
+        ctx.stroke();
+        // Points
+        if (n <= 31) {
+          ctx.fillStyle = ds.color;
+          ds.data.forEach((v, i) => {
+            ctx.beginPath();
+            ctx.arc(xPos(i), yPos(v), 3, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+      });
+    }
+
+    // Légende
+    ctx.font = "12px Arial, sans-serif";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "left";
+    const items = this.datasets.map(ds => ({
+      name: ds.label,
+      color: ds.color,
+      width: ctx.measureText(ds.label).width + 30
+    }));
+    const totalW = items.reduce((s, it) => s + it.width, 0);
+    let lx = Math.max(8, (W - totalW) / 2);
+    const ly = H - 14;
+    items.forEach(it => {
+      ctx.fillStyle = it.color;
+      ctx.fillRect(lx, ly - 5, 14, 10);
+      ctx.fillStyle = "#17243a";
+      ctx.fillText(it.name, lx + 19, ly);
+      lx += it.width;
+    });
+
+    // Survol / infobulle
+    if (this.hover !== null) {
+      const i = this.hover;
+      const gx = xPos(i);
+
+      if (!isBar) {
+        ctx.strokeStyle = "rgba(23,36,58,.35)";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(gx, T);
+        ctx.lineTo(gx, T + h);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      } else {
+        ctx.fillStyle = "rgba(23,36,58,.06)";
+        ctx.fillRect(gx - w / n / 2, T, w / n, h);
+      }
+
+      const lines = [String(this.cfg.hoverPrefix || "") + this.labels[i]]
+        .concat(this.datasets.map(ds => ds.label + " : " + this.fmt(ds.data[i])));
+      ctx.font = "12px Arial, sans-serif";
+      const bw = Math.max(...lines.map(s => ctx.measureText(s).width)) + 20;
+      const bh = lines.length * 18 + 10;
+      let bx = gx + 14;
+      if (bx + bw > W - 4) bx = gx - 14 - bw;
+      if (bx < 4) bx = 4;
+      const by = T + 6;
+
+      ctx.fillStyle = "rgba(16,43,80,.94)";
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      lines.forEach((s, k) => {
+        ctx.font = (k === 0 ? "bold " : "") + "12px Arial, sans-serif";
+        ctx.fillText(s, bx + 10, by + 14 + k * 18);
+      });
+    }
+  }
+}
+
+let debtChart, nominalChart, componentsChart, scenarioChart;
+
 function createCharts() {
+  debtChart = new MiniChart("debtChart", {
+    type:"line",
+    title:"Évolution du ratio dette / PIB",
+    unit:"%",
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
 
-  debtChart = new Chart(
-    document.getElementById("debtChart"),
-    {
-      type:"line",
-      data:{
-        labels:[],
-        datasets:[{
-          label:"Dette / PIB",
-          data:[],
-          borderColor:"#2457a7",
-          backgroundColor:"rgba(36,87,167,.1)",
-          fill:true,
-          tension:.25
-        }]
-      },
-      options:chartOptions("Évolution du ratio dette / PIB")
-    }
-  );
+  nominalChart = new MiniChart("nominalChart", {
+    type:"line",
+    title:"Dette et PIB nominal (milliards FCFA)",
+    unit:"",
+    decimals:1,
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
 
-  nominalChart = new Chart(
-    document.getElementById("nominalChart"),
-    {
-      type:"line",
-      data:{
-        labels:[],
-        datasets:[
-          {
-            label:"Dette nominale",
-            data:[],
-            borderColor:"#16845b",
-            tension:.25
-          },
-          {
-            label:"PIB nominal",
-            data:[],
-            borderColor:"#d58b24",
-            tension:.25
-          }
-        ]
-      },
-      options:chartOptions("Dette et PIB nominal","milliards FCFA")
-    }
-  );
+  componentsChart = new MiniChart("componentsChart", {
+    type:"bar",
+    title:"Décomposition de la variation annuelle du ratio (points de PIB)",
+    unit:"%",
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
 
-  componentsChart = new Chart(
-    document.getElementById("componentsChart"),
-    {
-      type:"bar",
-      data:{
-        labels:[],
-        datasets:[
-          {label:"Effet intérêt-croissance",data:[],backgroundColor:"#2457a7"},
-          {label:"Déficit primaire",data:[],backgroundColor:"#d58b24"},
-          {label:"Autres ajustements",data:[],backgroundColor:"#16845b"},
-          {label:"Effet de change",data:[],backgroundColor:"#c43d4b"}
-        ]
-      },
-      options:chartOptions("Décomposition de la variation annuelle du ratio")
-    }
-  );
-
-  scenarioChart = new Chart(
-    document.getElementById("scenarioChart"),
-    {
-      type:"line",
-      data:{
-        labels:[],
-        datasets:[]
-      },
-      options:chartOptions("Comparaison des scénarios de dette")
-    }
-  );
+  scenarioChart = new MiniChart("scenarioChart", {
+    type:"line",
+    title:"Comparaison des scénarios de dette",
+    unit:"%",
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
 }
 
 // ==========================================
@@ -1265,7 +1480,6 @@ function createCharts() {
 function interpret(p,rows) {
 
   const last = rows[rows.length-1];
-  const first = rows[1];
 
   const initialSnowball =
     (p.interest-p.growth)/(1+p.growth)*p.debt;
@@ -1338,7 +1552,7 @@ function interpret(p,rows) {
     "Le déficit primaire stabilisant initial est d'environ "+
     (stabilizing*100).toFixed(2)+
     " % du PIB. Un chiffre négatif signifie qu'un excédent primaire "+
-    serait nécessaire pour stabiliser le ratio, selon les hypothèses du modèle."
+    "serait nécessaire pour stabiliser le ratio, selon les hypothèses du modèle."
   );
 
   return messages;
@@ -1348,10 +1562,9 @@ function interpret(p,rows) {
 // 5. TABLEAU DE PROJECTION
 // ==========================================
 
-function renderTable(rows,p) {
+function renderTable(rows) {
 
   const tbody=document.getElementById("projectionTable");
-
   tbody.innerHTML="";
 
   rows.forEach(r=>{
@@ -1380,7 +1593,7 @@ function renderTable(rows,p) {
 }
 
 // ==========================================
-// 6. MISE A JOUR DES GRAPHIQUES
+// 6. MISE A JOUR GLOBALE
 // ==========================================
 
 function update() {
@@ -1389,32 +1602,21 @@ function update() {
 
     const p=parameters();
     const rows=simulate(p);
-
     const labels=rows.map(r=>r.year);
 
-    document.getElementById("initialDebt").textContent=
-      percent(p.debt);
+    document.getElementById("initialDebt").textContent=percent(p.debt);
+    document.getElementById("initialDeficit").textContent=percent(p.deficit);
+    document.getElementById("initialInterest").textContent=percent(p.interest);
+    document.getElementById("initialGrowth").textContent=percent(p.growth);
 
-    document.getElementById("initialDeficit").textContent=
-      percent(p.deficit);
-
-    document.getElementById("initialInterest").textContent=
-      percent(p.interest);
-
-    document.getElementById("initialGrowth").textContent=
-      percent(p.growth);
-
-    const first=rows[1];
     const last=rows[rows.length-1];
 
-    document.getElementById("resultDebt").textContent=
-      percent(last.ratio);
+    document.getElementById("resultDebt").textContent=percent(last.ratio);
 
     document.getElementById("variation").textContent=
       ((last.ratio-p.debt)*100).toFixed(2)+" points";
 
-    const snowball=
-      (p.interest-p.growth)/(1+p.growth)*p.debt;
+    const snowball=(p.interest-p.growth)/(1+p.growth)*p.debt;
 
     document.getElementById("snowball").textContent=
       (snowball*100).toFixed(2)+" points";
@@ -1427,13 +1629,11 @@ function update() {
       (stabilizing*100).toFixed(2)+" %";
 
     const interestBurden=
-      p.revenue>0?
-      p.debt*p.interest/p.revenue*100:0;
+      p.revenue>0 ? p.debt*p.interest/p.revenue*100 : 0;
 
     const serviceBurden=
-      p.revenue>0?
-      (p.debt*p.interest+
-      p.debt*p.amortization)/p.revenue*100:0;
+      p.revenue>0 ?
+      (p.debt*p.interest+p.debt*p.amortization)/p.revenue*100 : 0;
 
     document.getElementById("interestBurden").textContent=
       interestBurden.toFixed(2)+" %";
@@ -1441,41 +1641,36 @@ function update() {
     document.getElementById("serviceBurden").textContent=
       serviceBurden.toFixed(2)+" %";
 
-    debtChart.data.labels=labels;
-    debtChart.data.datasets[0].data=
-      rows.map(r=>r.ratio*100);
-    debtChart.update();
+    // Graphique 3.2
+    debtChart.setData(labels,[
+      {
+        label:"Dette / PIB",
+        data:rows.map(r=>r.ratio*100),
+        color:"#2457a7",
+        fill:true,
+        fillColor:"rgba(36,87,167,.12)"
+      }
+    ]);
 
-    nominalChart.data.labels=labels;
-    nominalChart.data.datasets[0].data=
-      rows.map(r=>r.debt);
-    nominalChart.data.datasets[1].data=
-      rows.map(r=>r.gdp);
-    nominalChart.update();
+    // Graphique 3.3
+    nominalChart.setData(labels,[
+      {label:"Dette nominale",data:rows.map(r=>r.debt),color:"#16845b"},
+      {label:"PIB nominal",data:rows.map(r=>r.gdp),color:"#d58b24"}
+    ]);
 
-    componentsChart.data.labels=
-      rows.slice(1).map(r=>"Année "+r.year);
+    // Graphique 3.4
+    const tail=rows.slice(1);
+    componentsChart.setData(tail.map(r=>r.year),[
+      {label:"Effet intérêt-croissance",data:tail.map(r=>r.snowball*100),color:"#2457a7"},
+      {label:"Déficit primaire",data:tail.map(r=>r.primaryEffect*100),color:"#d58b24"},
+      {label:"Autres ajustements",data:tail.map(r=>r.sfaEffect*100),color:"#16845b"},
+      {label:"Effet de change",data:tail.map(r=>r.fxEffect*100),color:"#c43d4b"}
+    ]);
 
-    componentsChart.data.datasets[0].data=
-      rows.slice(1).map(r=>r.snowball*100);
-
-    componentsChart.data.datasets[1].data=
-      rows.slice(1).map(r=>r.primaryEffect*100);
-
-    componentsChart.data.datasets[2].data=
-      rows.slice(1).map(r=>r.sfaEffect*100);
-
-    componentsChart.data.datasets[3].data=
-      rows.slice(1).map(r=>r.fxEffect*100);
-
-    componentsChart.update();
-
-    renderTable(rows,p);
-
-    const interpretation=interpret(p,rows);
+    renderTable(rows);
 
     document.getElementById("interpretation").innerHTML=
-      interpretation.map(x=>"<p>• "+x+"</p>").join("");
+      interpret(p,rows).map(x=>"<p>• "+x+"</p>").join("");
 
     updateScenarios(p);
 
@@ -1513,34 +1708,15 @@ function updateScenarios(p) {
 
   const labels=baseRows.map(r=>r.year);
 
-  scenarioChart.data.labels=labels;
+  scenarioChart.setData(labels,[
+    {label:"Référence",data:baseRows.map(r=>r.ratio*100),color:"#2457a7"},
+    {label:"Favorable",data:favorableRows.map(r=>r.ratio*100),color:"#16845b"},
+    {label:"Stress",data:stressRows.map(r=>r.ratio*100),color:"#c43d4b"}
+  ]);
 
-  scenarioChart.data.datasets=[
-    {
-      label:"Référence",
-      data:baseRows.map(r=>r.ratio*100),
-      borderColor:"#2457a7",
-      tension:.2
-    },
-    {
-      label:"Favorable",
-      data:favorableRows.map(r=>r.ratio*100),
-      borderColor:"#16845b",
-      tension:.2
-    },
-    {
-      label:"Stress",
-      data:stressRows.map(r=>r.ratio*100),
-      borderColor:"#c43d4b",
-      tension:.2
-    }
-  ];
-
-  scenarioChart.update();
-
-  const a=baseRows.at(-1).ratio*100;
-  const b=favorableRows.at(-1).ratio*100;
-  const c=stressRows.at(-1).ratio*100;
+  const a=baseRows[baseRows.length-1].ratio*100;
+  const b=favorableRows[favorableRows.length-1].ratio*100;
+  const c=stressRows[stressRows.length-1].ratio*100;
 
   document.getElementById("scenarioText").innerHTML=
     "<p>À l'horizon choisi :</p>"+
@@ -1556,27 +1732,6 @@ function updateScenarios(p) {
 // ==========================================
 // 8. FISCALITE
 // ==========================================
-
-function bindPair(id) {
-
-  const range=document.getElementById(id);
-  const number=document.getElementById(id+"N");
-
-  range.addEventListener("input",()=>{
-    number.value=range.value;
-    updateTax();
-  });
-
-  number.addEventListener("input",()=>{
-    const n=Number(number.value);
-    if(number.value!=="" &&
-       n>=Number(range.min) &&
-       n<=Number(range.max)) {
-      range.value=n;
-      updateTax();
-    }
-  });
-}
 
 function updateTax() {
 
@@ -1615,11 +1770,8 @@ function updateIncidence() {
   const consumer=es/(es+ed);
   const producer=ed/(es+ed);
 
-  document.getElementById("consumerShare").textContent=
-    percent(consumer);
-
-  document.getElementById("producerShare").textContent=
-    percent(producer);
+  document.getElementById("consumerShare").textContent=percent(consumer);
+  document.getElementById("producerShare").textContent=percent(producer);
 }
 
 // ==========================================
@@ -1635,11 +1787,8 @@ function updateInflation() {
   const real=tax/Math.pow(1+inflation,delay);
   const loss=tax-real;
 
-  document.getElementById("realTax").textContent=
-    money(real)+" FCFA";
-
-  document.getElementById("taxLoss").textContent=
-    money(loss)+" FCFA";
+  document.getElementById("realTax").textContent=money(real)+" FCFA";
+  document.getElementById("taxLoss").textContent=money(loss)+" FCFA";
 
   document.getElementById("inflationInterpretation").textContent=
     "Pour une recette nominale de "+money(tax)+
@@ -1695,7 +1844,7 @@ function downloadCSV() {
       (r.ratio*100).toFixed(4),
       r.interest.toFixed(4),
       r.primary.toFixed(4),
-      r.serviceRatio===undefined?
+      (r.serviceRatio===null || r.serviceRatio===undefined)?
         "":(r.serviceRatio*100).toFixed(4)
     ].join(";"));
   });
@@ -1749,29 +1898,16 @@ function resetSimulation() {
 
 bindControls();
 
-[
-  "taxRate",
-  "taxImprovement"
-].forEach(bindPair);
+bindPair("taxRate", updateTax);
+bindPair("taxImprovement", updateTax);
+bindPair("inflation", updateInflation);
+bindPair("delay", updateInflation);
+bindPair("efficiency", updateEfficiency);
 
-[
-  "inflation",
-  "delay"
-].forEach(bindPair);
-
-bindPair("efficiency");
-
-document.getElementById("taxBase")
-  .addEventListener("input",updateTax);
-
-document.getElementById("taxAmount")
-  .addEventListener("input",updateInflation);
-
-document.getElementById("elasticSupply")
-  .addEventListener("input",updateIncidence);
-
-document.getElementById("elasticDemand")
-  .addEventListener("input",updateIncidence);
+document.getElementById("taxBase").addEventListener("input",updateTax);
+document.getElementById("taxAmount").addEventListener("input",updateInflation);
+document.getElementById("elasticSupply").addEventListener("input",updateIncidence);
+document.getElementById("elasticDemand").addEventListener("input",updateIncidence);
 
 createCharts();
 update();
