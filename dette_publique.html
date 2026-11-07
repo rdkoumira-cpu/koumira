@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dette publique & Développement | Laboratoire économique</title>
+
+<style>
+:root {
+  --bg:#f4f6fa;
+  --surface:#ffffff;
+  --text:#17243a;
+  --muted:#68758a;
+  --blue:#2457a7;
+  --blue-light:#e9f0ff;
+  --green:#16845b;
+  --red:#c43d4b;
+  --orange:#d58b24;
+  --border:#dfe5ee;
+  --shadow:0 5px 20px rgba(20,40,80,.06);
+}
+
+* {box-sizing:border-box}
+
+body {
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+}
+
+header {
+  background:linear-gradient(120deg,#102b50,#2457a7);
+  color:white;
+  padding:45px 7%;
+}
+
+header h1 {
+  font-size:clamp(25px,4vw,42px);
+  margin:0;
+}
+
+header p {
+  max-width:850px;
+  color:#dce8ff;
+}
+
+nav {
+  background:#fff;
+  padding:12px 5%;
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+nav a {
+  text-decoration:none;
+  color:var(--blue);
+  padding:7px 11px;
+  font-size:13px;
+  border-radius:6px;
+}
+
+nav a:hover {background:var(--blue-light)}
+
+main {
+  max-width:1250px;
+  margin:auto;
+  padding:25px 18px 60px;
+}
+
+section {
+  margin:35px 0;
+  scroll-margin-top:85px;
+}
+
+h2 {
+  font-size:25px;
+  border-bottom:2px solid var(--border);
+  padding-bottom:10px;
+}
+
+h3 {font-size:18px}
+
+.card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  box-shadow:var(--shadow);
+  margin:15px 0;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.metric {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:17px;
+  margin:6px 0;
+}
+
+.metric small {color:var(--muted)}
+
+.metric strong {
+  display:block;
+  font-size:27px;
+  margin-top:7px;
+  color:var(--blue);
+}
+
+.formula {
+  background:#edf3ff;
+  border-left:4px solid var(--blue);
+  padding:15px;
+  margin:15px 0;
+  overflow-x:auto;
+  font-family:Georgia,serif;
+  font-size:18px;
+}
+
+.control {
+  margin:17px 0;
+}
+
+.control label {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.control input[type=range] {
+  width:100%;
+  margin-top:10px;
+  accent-color:var(--blue);
+}
+
+.control input[type=number],
+select {
+  width:100%;
+  padding:9px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-top:6px;
+}
+
+button {
+  background:var(--blue);
+  color:white;
+  border:0;
+  border-radius:7px;
+  padding:11px 17px;
+  cursor:pointer;
+  margin:5px;
+}
+
+button:hover {opacity:.85}
+
+button.secondary {
+  background:#e9eef7;
+  color:#203650;
+}
+
+.chart-container {
+  position:relative;
+  height:350px;
+  margin:20px 0;
+}
+
+.chart-container canvas {
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  min-width:650px;
+}
+
+th,td {
+  border-bottom:1px solid var(--border);
+  padding:10px;
+  text-align:right;
+}
+
+th:first-child,td:first-child {text-align:left}
+
+th {background:#edf3ff}
+
+.table-scroll {overflow-x:auto}
+
+.explain {
+  background:#f1f8f5;
+  border-left:4px solid var(--green);
+  padding:14px;
+  margin:14px 0;
+}
+
+.explain p {margin:6px 0}
+
+.warning {
+  background:#fff6e9;
+  border-left:4px solid var(--orange);
+  padding:14px;
+  margin:14px 0;
+}
+
+.danger {
+  background:#fff0f1;
+  border-left:4px solid var(--red);
+  padding:14px;
+  margin:14px 0;
+}
+
+.diagram {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  margin:20px 0;
+}
+
+.node {
+  padding:14px 16px;
+  border:1px solid #b7c9e7;
+  background:#edf3ff;
+  border-radius:8px;
+  text-align:center;
+  width:min(100%,500px);
+  font-weight:bold;
+  color:#17243a;
+}
+
+.node span {
+  display:inline-block;
+  width:24px;
+  height:24px;
+  line-height:24px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  font-size:13px;
+  margin-right:8px;
+}
+
+.node.last {
+  background:#e3f4ec;
+  border-color:#a8d7c2;
+}
+
+.arrow {
+  font-size:23px;
+  color:var(--blue);
+  line-height:1;
+  user-select:none;
+}
+
+footer {
+  background:#102b50;
+  color:white;
+  padding:30px 7%;
+  margin-top:40px;
+}
+
+footer a {color:#bcd7ff}
+
+.muted {color:var(--muted)}
+.tag {
+  display:inline-block;
+  background:var(--blue-light);
+  color:var(--blue);
+  padding:4px 9px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+@media(max-width:600px) {
+  header {padding:30px 20px}
+  main {padding:12px}
+  .chart-container {height:280px}
+  nav {position:relative}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <span class="tag">LABORATOIRE D'ÉCONOMIE APPLIQUÉE</span>
+  <h1>Dette publique & Développement</h1>
+  <p>
+    Comprendre les mécanismes d'endettement, simuler les trajectoires
+    budgétaires et analyser la soutenabilité de la dette des économies africaines.
+  </p>
+  <p>Économie publique • Macroéconomie • Fiscalité • Économétrie</p>
+</header>
+
+<nav>
+  <a href="#intro">Introduction</a>
+  <a href="#theorie">Théorie</a>
+  <a href="#simulateur">Simulateur</a>
+  <a href="#scenarios">Scénarios</a>
+  <a href="#fiscalite">Fiscalité</a>
+  <a href="#inflation">Inflation</a>
+  <a href="#efficacite">Efficacité</a>
+  <a href="#analyse">Analyse</a>
+  <a href="#sources">Sources</a>
+</nav>
+
+<main>
+
+<!-- INTRODUCTION -->
+
+<section id="intro">
+<h2>1. Comprendre l'économie de la dette</h2>
+
+<div class="card">
+<p>
+La dette publique représente l'ensemble des engagements financiers
+d'un État à une date donnée, selon le périmètre statistique retenu.
+Elle permet de financer des investissements et des dépenses publiques,
+mais elle crée également des obligations futures.
+</p>
+
+<p>
+L'analyse économique ne consiste donc pas seulement à mesurer
+le montant de la dette. Elle consiste à comprendre sa dynamique,
+son coût, sa structure et sa capacité de remboursement.
+</p>
+
+<div class="formula">
+Dette / PIB = (Dette publique / PIB nominal) × 100
+</div>
+</div>
+
+<div class="grid">
+<div class="metric">
+<small>Stock de dette initial</small>
+<strong id="initialDebt">65 %</strong>
+</div>
+<div class="metric">
+<small>Déficit primaire initial</small>
+<strong id="initialDeficit">1,5 %</strong>
+</div>
+<div class="metric">
+<small>Taux d'intérêt</small>
+<strong id="initialInterest">8 %</strong>
+</div>
+<div class="metric">
+<small>Croissance nominale</small>
+<strong id="initialGrowth">7 %</strong>
+</div>
+</div>
+
+<div class="warning">
+<strong>Attention :</strong> les valeurs initiales sont fictives et servent
+uniquement à comprendre les mécanismes économiques. Elles ne constituent
+pas des données officielles d'un pays africain.
+</div>
+</section>
+
+<!-- THEORIE -->
+
+<section id="theorie">
+<h2>2. Fondements théoriques et équations</h2>
+
+<div class="card">
+<h3>2.1. La contrainte budgétaire de l'État</h3>
+
+<p>
+Le déficit public correspond à un excès de dépenses sur les recettes.
+Il doit être financé par l'endettement, l'utilisation de réserves
+ou d'autres opérations de financement.
+</p>
+
+<div class="formula">
+Déficit global = Déficit primaire + Charges d'intérêts
+</div>
+
+<div class="formula">
+Solde primaire = Recettes publiques − Dépenses hors intérêts
+</div>
+
+<p>
+Un solde primaire positif désigne un excédent primaire.
+Un solde primaire négatif désigne un déficit primaire.
+</p>
+</div>
+
+<div class="card">
+<h3>2.2. Équation fondamentale de la dynamique de la dette</h3>
+
+<div class="formula">
+d(t) = [(1 + i) / (1 + g)] × d(t−1) + p + s
+</div>
+
+<p>Avec :</p>
+<ul>
+<li>d(t) : dette publique rapportée au PIB.</li>
+<li>i : taux d'intérêt nominal effectif moyen.</li>
+<li>g : taux de croissance nominal du PIB.</li>
+<li>p : déficit primaire rapporté au PIB courant.</li>
+<li>s : ajustements stock-flux rapportés au PIB courant.</li>
+</ul>
+
+<p>
+Cette formule représente une approximation de la dynamique
+de la dette dans un modèle simplifié.
+</p>
+
+<div class="formula">
+Effet boule de neige = [(i − g) / (1 + g)] × d(t−1)
+</div>
+
+<p>
+Lorsque i est supérieur à g, le différentiel taux d'intérêt-croissance
+exerce une pression à la hausse sur le ratio dette/PIB.
+</p>
+</div>
+
+<div class="card">
+<h3>2.3. Le solde primaire stabilisant</h3>
+
+<div class="formula">
+p* = − [(i − g) / (1 + g)] × d(t−1) − s
+</div>
+
+<p>
+Cette formule donne le déficit primaire stabilisant, avec notre
+convention de signe (déficit positif, excédent négatif).
+</p>
+
+<p>
+Si le déficit primaire réel est supérieur à ce niveau,
+le ratio de dette augmente, toutes choses égales par ailleurs.
+</p>
+</div>
+
+<div class="card">
+<h3>2.4. La dette en valeur nominale</h3>
+
+<div class="formula">
+D(t) = (1 + i) × D(t−1) + DP(t) + AF(t)
+</div>
+
+<p>
+D : dette nominale ; DP : déficit primaire nominal ;
+AF : ajustements stock-flux.
+</p>
+</div>
+</section>
+
+<!-- SIMULATEUR -->
+
+<section id="simulateur">
+<h2>3. Simulateur interactif de dette publique</h2>
+
+<p class="muted">
+Modifie les paramètres pour observer immédiatement leurs effets
+sur les trajectoires d'endettement.
+</p>
+
+<div class="card">
+<h3>3.1. Paramètres macroéconomiques</h3>
+
+<div class="grid">
+<div>
+<div class="control">
+<label for="debt">Dette initiale (% PIB)</label>
+<input id="debt" type="range" min="10" max="180" step="1" value="65">
+<input id="debtN" type="number" min="10" max="180" value="65">
+</div>
+
+<div class="control">
+<label for="interest">Taux d'intérêt nominal (%)</label>
+<input id="interest" type="range" min="0" max="25" step="0.1" value="8">
+<input id="interestN" type="number" min="0" max="25" step="0.1" value="8">
+</div>
+
+<div class="control">
+<label for="growth">Croissance nominale (%)</label>
+<input id="growth" type="range" min="-10" max="25" step="0.1" value="7">
+<input id="growthN" type="number" min="-10" max="25" step="0.1" value="7">
+</div>
+
+<div class="control">
+<label for="deficit">Déficit primaire (% PIB)</label>
+<input id="deficit" type="range" min="-10" max="15" step="0.1" value="1.5">
+<input id="deficitN" type="number" min="-10" max="15" step="0.1" value="1.5">
+</div>
+</div>
+
+<div>
+<div class="control">
+<label for="sfa">Ajustements stock-flux (% PIB)</label>
+<input id="sfa" type="range" min="-5" max="10" step="0.1" value="0">
+<input id="sfaN" type="number" min="-5" max="10" step="0.1" value="0">
+</div>
+
+<div class="control">
+<label for="revenue">Recettes publiques (% PIB)</label>
+<input id="revenue" type="range" min="5" max="45" step="0.5" value="18">
+<input id="revenueN" type="number" min="5" max="45" step="0.5" value="18">
+</div>
+
+<div class="control">
+<label for="amortization">Principal arrivant à échéance (% stock/an)</label>
+<input id="amortization" type="range" min="0" max="30" step="0.5" value="5">
+<input id="amortizationN" type="number" min="0" max="30" step="0.5" value="5">
+</div>
+
+<div class="control">
+<label for="horizon">Horizon de projection</label>
+<select id="horizon">
+<option value="5">5 ans</option>
+<option value="10">10 ans</option>
+<option value="15" selected>15 ans</option>
+<option value="30">30 ans</option>
+</select>
+</div>
+</div>
+</div>
+
+<div class="control">
+<label for="fxShare">Part de la dette en devises (%)</label>
+<input id="fxShare" type="range" min="0" max="100" step="1" value="40">
+<input id="fxShareN" type="number" min="0" max="100" value="40">
+</div>
+
+<div class="control">
+<label for="depreciation">Dépréciation annuelle de la monnaie (%)</label>
+<input id="depreciation" type="range" min="0" max="30" step="0.5" value="0">
+<input id="depreciationN" type="number" min="0" max="30" step="0.5" value="0">
+</div>
+
+<div class="warning">
+Le risque de change est ici représenté par une réévaluation simplifiée
+du stock de dette en devises. Le modèle suppose une part en devises
+constante et applique une dépréciation annuelle uniforme.
+</div>
+
+<div class="grid">
+<div class="metric">
+<small>Dette après projection</small>
+<strong id="resultDebt">--</strong>
+</div>
+<div class="metric">
+<small>Variation du ratio</small>
+<strong id="variation">--</strong>
+</div>
+<div class="metric">
+<small>Effet boule de neige annuel initial</small>
+<strong id="snowball">--</strong>
+</div>
+<div class="metric">
+<small>Déficit primaire stabilisant initial</small>
+<strong id="stabilizing">--</strong>
+</div>
+<div class="metric">
+<small>Intérêts / recettes initiales</small>
+<strong id="interestBurden">--</strong>
+</div>
+<div class="metric">
+<small>Service de dette / recettes initiales</small>
+<strong id="serviceBurden">--</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h3>3.2. Trajectoire de la dette</h3>
+<div class="chart-container">
+<canvas id="debtChart"></canvas>
+</div>
+</div>
+
+<div class="card">
+<h3>3.3. Évolution du stock nominal de dette</h3>
+<div class="chart-container">
+<canvas id="nominalChart"></canvas>
+</div>
+</div>
+
+<div class="card">
+<h3>3.4. Décomposition de la variation du ratio</h3>
+<div class="chart-container">
+<canvas id="componentsChart"></canvas>
+</div>
+</div>
+
+<div class="card">
+<h3>3.5. Tableau de projection annuelle</h3>
+<div class="table-scroll">
+<table>
+<thead>
+<tr>
+<th>Année</th>
+<th>PIB</th>
+<th>Dette</th>
+<th>Dette/PIB</th>
+<th>Intérêts</th>
+<th>Déficit primaire</th>
+<th>Service/recettes</th>
+</tr>
+</thead>
+<tbody id="projectionTable"></tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3>3.6. Interprétation automatique</h3>
+<div id="interpretation" class="explain">
+Les interprétations apparaîtront après le calcul.
+</div>
+</div>
+
+<button onclick="resetSimulation()" class="secondary">
+Réinitialiser les paramètres
+</button>
+<button onclick="downloadCSV()">
+Exporter les projections CSV
+</button>
+</section>
+
+<!-- SCENARIOS -->
+
+<section id="scenarios">
+<h2>4. Comparaison de scénarios économiques</h2>
+
+<p>
+Nous allons comparer trois situations : scénario de référence,
+scénario favorable et scénario de stress.
+</p>
+
+<div class="card">
+<h3>4.1. Hypothèses des scénarios</h3>
+<div class="table-scroll">
+<table>
+<thead>
+<tr><th>Paramètre</th><th>Référence</th><th>Favorable</th><th>Stress</th></tr>
+</thead>
+<tbody>
+<tr><td>Intérêt</td><td>Valeur choisie</td><td>−1,5 point</td><td>+2 points</td></tr>
+<tr><td>Croissance nominale</td><td>Valeur choisie</td><td>+1 point</td><td>−2 points</td></tr>
+<tr><td>Déficit primaire</td><td>Valeur choisie</td><td>−0,5 point</td><td>+1 point</td></tr>
+</tbody>
+</table>
+</div>
+<p class="muted">Les hypothèses favorables et défavorables sont des chocs pédagogiques, pas des prévisions.</p>
+</div>
+
+<div class="card">
+<h3>4.2. Comparaison des trajectoires</h3>
+<div class="chart-container">
+<canvas id="scenarioChart"></canvas>
+</div>
+<div id="scenarioText" class="explain"></div>
+</div>
+</section>
+
+<!-- FISCALITE -->
+
+<section id="fiscalite">
+<h2>5. Fiscalité et capacité de remboursement</h2>
+
+<div class="card">
+<h3>5.1. Les recettes fiscales et le déficit primaire</h3>
+
+<p>
+Le déficit primaire représente l'écart entre les dépenses hors intérêts
+et les recettes publiques.
+</p>
+
+<div class="formula">
+DP = Dépenses primaires − Recettes publiques
+</div>
+
+<p>
+Lorsque le déficit primaire augmente, les besoins de financement
+de l'État augmentent également.
+</p>
+
+<div class="formula">
+Pression fiscale = Recettes fiscales / PIB × 100
+</div>
+</div>
+
+<div class="card">
+<h3>5.2. Simulateur de recettes fiscales</h3>
+
+<div class="control">
+<label for="taxBase">PIB nominal (milliards FCFA)</label>
+<input id="taxBase" type="number" min="1" value="10000">
+</div>
+
+<div class="control">
+<label for="taxRate">Taux de recettes fiscales (% PIB)</label>
+<input id="taxRate" type="range" min="5" max="35" value="15">
+<input id="taxRateN" type="number" min="5" max="35" value="15">
+</div>
+
+<div class="control">
+<label for="taxImprovement">Hausse du taux de recettes (% PIB)</label>
+<input id="taxImprovement" type="range" min="0" max="10" step="0.5" value="2">
+<input id="taxImprovementN" type="number" min="0" max="10" step="0.5" value="2">
+</div>
+
+<div class="grid">
+<div class="metric">
+<small>Recettes initiales</small>
+<strong id="taxInitial">--</strong>
+</div>
+<div class="metric">
+<small>Recettes après réforme</small>
+<strong id="taxFinal">--</strong>
+</div>
+<div class="metric">
+<small>Recettes supplémentaires</small>
+<strong id="taxGain">--</strong>
+</div>
+</div>
+
+<div id="taxInterpretation" class="explain"></div>
+</div>
+
+<div class="card">
+<h3>5.3. Incidence économique de l'impôt</h3>
+<p>
+L'incidence légale ne correspond pas nécessairement à l'incidence économique.
+La répartition de la charge fiscale dépend notamment des élasticités
+de l'offre et de la demande.
+</p>
+
+<div class="formula">
+Part de la taxe supportée par le consommateur
+= εs / (εs + |εd|)
+</div>
+
+<div class="control">
+<label for="elasticSupply">Élasticité de l'offre (valeur absolue)</label>
+<input id="elasticSupply" type="number" min="0.1" step="0.1" value="1">
+</div>
+
+<div class="control">
+<label for="elasticDemand">Élasticité de la demande (valeur absolue)</label>
+<input id="elasticDemand" type="number" min="0.1" step="0.1" value="0.5">
+</div>
+
+<div class="metric">
+<small>Part supportée par les consommateurs</small>
+<strong id="consumerShare">--</strong>
+</div>
+<div class="metric">
+<small>Part supportée par les producteurs</small>
+<strong id="producerShare">--</strong>
+</div>
+<p class="muted">
+Modèle concurrentiel simplifié, avec taxe unitaire et sans autres distorsions.
+</p>
+</div>
+</section>
+
+<!-- INFLATION -->
+
+<section id="inflation">
+<h2>6. Inflation, change et effet Olivera-Tanzi</h2>
+
+<div class="card">
+<h3>6.1. L'effet Olivera-Tanzi</h3>
+
+<p>
+Lorsque le recouvrement des impôts intervient avec retard,
+l'inflation peut réduire la valeur réelle des recettes publiques.
+</p>
+
+<div class="formula">
+Valeur réelle = Recette nominale / (1 + inflation)^délai
+</div>
+
+<div class="control">
+<label for="taxAmount">Recette fiscale nominale (FCFA)</label>
+<input id="taxAmount" type="number" value="100000">
+</div>
+
+<div class="control">
+<label for="inflation">Inflation annuelle (%)</label>
+<input id="inflation" type="range" min="0" max="100" value="10">
+<input id="inflationN" type="number" min="0" max="100" value="10">
+</div>
+
+<div class="control">
+<label for="delay">Délai de recouvrement (années)</label>
+<input id="delay" type="range" min="0" max="3" step="0.5" value="0.5">
+<input id="delayN" type="number" min="0" max="3" step="0.5" value="0.5">
+</div>
+
+<div class="grid">
+<div class="metric">
+<small>Valeur réelle de la recette</small>
+<strong id="realTax">--</strong>
+</div>
+<div class="metric">
+<small>Perte de valeur réelle</small>
+<strong id="taxLoss">--</strong>
+</div>
+</div>
+
+<div id="inflationInterpretation" class="explain"></div>
+</div>
+
+<div class="card">
+<h3>6.2. Risque de change</h3>
+<p>
+Une dépréciation de la monnaie augmente, en monnaie nationale,
+la valeur des engagements libellés en devises.
+</p>
+<div class="formula">
+Dette extérieure en monnaie nationale
+= Dette en devises × Taux de change
+</div>
+</div>
+</section>
+
+<!-- EFFICACITE -->
+
+<section id="efficacite">
+<h2>7. Efficacité des dépenses publiques</h2>
+
+<div class="card">
+<h3>7.1. Le principe de la frontière stochastique</h3>
+
+<div class="formula">
+Yᵢ = f(Xᵢ ; β) × exp(vᵢ − uᵢ)
+</div>
+
+<ul>
+<li>Yᵢ : production ou résultat observé.</li>
+<li>Xᵢ : ressources utilisées.</li>
+<li>β : paramètres de la fonction de production.</li>
+<li>vᵢ : bruit statistique.</li>
+<li>uᵢ : inefficacité technique.</li>
+</ul>
+
+<div class="formula">
+TEᵢ = exp(−uᵢ)
+</div>
+
+<p>
+Le score d'efficacité est compris entre 0 et 1 dans cette formulation.
+Il mesure la proximité de l'unité avec la frontière estimée.
+</p>
+
+<div class="control">
+<label for="efficiency">Score d'efficacité technique</label>
+<input id="efficiency" type="range" min="0.1" max="1" step="0.01" value="0.73">
+<input id="efficiencyN" type="number" min="0.1" max="1" step="0.01" value="0.73">
+</div>
+
+<div class="metric">
+<small>Score sélectionné</small>
+<strong id="efficiencyValue">73 %</strong>
+</div>
+
+<div id="efficiencyInterpretation" class="explain"></div>
+
+<div class="warning">
+Un score de 0,73 ne signifie pas que 27 % du budget est gaspillé.
+Il s'agit d'un indicateur relatif à une frontière de production
+estimée et à un modèle statistique donné.
+</div>
+</div>
+
+<div class="card">
+<h3>7.2. Pourquoi l'efficacité influence-t-elle la dette ?</h3>
+
+<div class="diagram">
+<div class="node"><span>1</span>Emprunt public</div>
+<div class="arrow">↓</div>
+<div class="node"><span>2</span>Investissement public</div>
+<div class="arrow">↓</div>
+<div class="node"><span>3</span>Infrastructure et services publics</div>
+<div class="arrow">↓</div>
+<div class="node"><span>4</span>Productivité et activité économique</div>
+<div class="arrow">↓</div>
+<div class="node"><span>5</span>Élargissement potentiel des recettes fiscales</div>
+<div class="arrow">↓</div>
+<div class="node last"><span>6</span>Capacité de remboursement</div>
+</div>
+
+<p>
+Ce mécanisme n'est pas automatique. Les retombées dépendent
+de la qualité des projets, de leur exécution, de leur entretien
+et de l'environnement économique.
+</p>
+</div>
+</section>
+
+<!-- ANALYSE -->
+
+<section id="analyse">
+<h2>8. Interprétations et questions de recherche</h2>
+
+<div class="card">
+<h3>8.1. Les principaux mécanismes économiques</h3>
+
+<ol>
+<li>Un taux d'intérêt supérieur à la croissance exerce une pression sur le ratio de dette.</li>
+<li>Un excédent primaire contribue à limiter l'augmentation de la dette.</li>
+<li>Une baisse des recettes fiscales peut accroître le besoin de financement.</li>
+<li>Une dépréciation augmente la valeur locale de la dette en devises.</li>
+<li>Une dette à échéance courte accroît le risque de refinancement.</li>
+<li>Une mauvaise sélection des investissements peut réduire les retombées économiques des emprunts.</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>8.2. Questions pour un débat universitaire</h3>
+<ul>
+<li>La dette africaine est-elle davantage un problème de volume ou de coût du financement ?</li>
+<li>Les programmes de consolidation budgétaire peuvent-ils freiner la croissance ?</li>
+<li>Comment concilier justice fiscale et augmentation des recettes publiques ?</li>
+<li>La dette intérieure peut-elle réduire la dépendance extérieure ?</li>
+<li>La mutualisation des dettes dans une union régionale est-elle économiquement souhaitable ?</li>
+<li>Comment mesurer la contribution réelle des investissements financés par emprunt ?</li>
+</ul>
+</div>
+</section>
+
+<!-- SOURCES -->
+
+<section id="sources">
+<h2>9. Sources et références bibliographiques</h2>
+
+<div class="card">
+<h3>Institutions internationales</h3>
+<ul>
+<li>
+<a href="https://www.imf.org/" target="_blank" rel="noopener">
+Fonds monétaire international (FMI)
+</a> — dette publique, finances publiques et analyses de soutenabilité.
+</li>
+<li>
+<a href="https://www.worldbank.org/" target="_blank" rel="noopener">
+Banque mondiale
+</a> — dette internationale et indicateurs de développement.
+</li>
+<li>
+<a href="https://www.bceao.int/" target="_blank" rel="noopener">
+BCEAO
+</a> — statistiques monétaires et marché régional des titres publics.
+</li>
+<li>
+<a href="https://www.tresor.economie.gouv.fr/" target="_blank" rel="noopener">
+Direction générale du Trésor
+</a> — documentation sur les finances publiques et la dette.
+</li>
+<li>
+<a href="https://unctad.org/" target="_blank" rel="noopener">
+CNUCED
+</a> — dette, développement et financement international.
+</li>
+<li>
+<a href="https://www.uneca.org/" target="_blank" rel="noopener">
+Commission économique des Nations unies pour l'Afrique
+</a> — rapports économiques africains.
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Travaux académiques</h3>
+<ul>
+<li>
+Battese, G. E. et Coelli, T. J. (1992).
+Frontier production functions, technical efficiency and panel data.
+</li>
+<li>
+Olivera, J. H. G. (1967).
+Money, prices and fiscal lags: a note on the dynamics of inflation.
+</li>
+<li>
+Tanzi, V. (1977).
+Inflation, lags in collection, and the real value of tax revenue.
+</li>
+</ul>
+</div>
+
+<div class="warning">
+Les liens institutionnels ci-dessus sont des portails de consultation.
+Les résultats du simulateur ne sont pas des statistiques extraites
+automatiquement de ces organismes. Pour une étude empirique,
+il faudra importer les séries officielles et préciser leur définition,
+leur période et leur périmètre.
+</div>
+</section>
+
+</main>
+
+<footer>
+<h3>Dette publique & Développement</h3>
+<p>Un laboratoire pédagogique d'économie publique et de macroéconomie appliquée.</p>
+<p>Projet d'apprentissage universitaire — Version 1.1</p>
+<p>Les simulations sont illustratives et ne constituent pas des prévisions économiques.</p>
+</footer>
+
+<script>
+
+// ==========================================
+// 1. OUTILS ET PARAMETRES
+// ==========================================
+
+const ids = [
+  "debt","interest","growth","deficit","sfa",
+  "revenue","amortization","fxShare","depreciation"
+];
+
+function value(id) {
+  return Number(document.getElementById(id).value);
+}
+
+function percent(x) {
+  return (x * 100).toFixed(2) + " %";
+}
+
+function money(x) {
+  return x.toLocaleString("fr-FR", {
+    maximumFractionDigits:2
+  });
+}
+
+// Lie un curseur et son champ numérique ; "callback" est appelé à chaque changement.
+function bindPair(id, callback) {
+
+  const range = document.getElementById(id);
+  const number = document.getElementById(id+"N");
+
+  range.addEventListener("input", () => {
+    number.value = range.value;
+    callback();
+  });
+
+  number.addEventListener("input", () => {
+    const n = Number(number.value);
+    if (number.value !== "" &&
+        n >= Number(range.min) &&
+        n <= Number(range.max)) {
+      range.value = n;
+      callback();
+    }
+  });
+}
+
+function bindControls() {
+  ids.forEach(id => bindPair(id, update));
+  document.getElementById("horizon")
+    .addEventListener("change", update);
+}
+
+function parameters() {
+  return {
+    debt:value("debt")/100,
+    interest:value("interest")/100,
+    growth:value("growth")/100,
+    deficit:value("deficit")/100,
+    sfa:value("sfa")/100,
+    revenue:value("revenue")/100,
+    amortization:value("amortization")/100,
+    fxShare:value("fxShare")/100,
+    depreciation:value("depreciation")/100,
+    horizon:value("horizon")
+  };
+}
+
+// ==========================================
+// 2. MODELE DE DYNAMIQUE DE LA DETTE
+// ==========================================
+
+function simulate(p) {
+
+  const rows = [];
+
+  let gdp = 1000;
+  let debt = gdp * p.debt;
+
+  rows.push({
+    year:0,
+    gdp:gdp,
+    debt:debt,
+    ratio:debt/gdp,
+    interest:0,
+    primary:0,
+    service:0,
+    serviceRatio:null,
+    snowball:0,
+    primaryEffect:0,
+    sfaEffect:0,
+    fxEffect:0
+  });
+
+  for(let t=1;t<=p.horizon;t++) {
+
+    const previousGDP = gdp;
+    const previousDebt = debt;
+
+    if(p.growth <= -1) {
+      throw new Error("La croissance nominale doit être supérieure à -100 %.");
+    }
+
+    gdp = previousGDP*(1+p.growth);
+
+    const interestCost = previousDebt*p.interest;
+    const primaryDeficit = gdp*p.deficit;
+    const stockFlow = gdp*p.sfa;
+
+    // Réévaluation approximative de la dette en devises.
+    const fxAdjustment = previousDebt*p.fxShare*p.depreciation;
+
+    debt =
+      previousDebt +
+      interestCost +
+      primaryDeficit +
+      stockFlow +
+      fxAdjustment;
+
+    const ratio = debt/gdp;
+
+    // Effet boule de neige : [(i - g)/(1 + g)] × d(t-1)
+    const snowball =
+      (p.interest-p.growth)/(1+p.growth)*(previousDebt/previousGDP);
+
+    const primaryEffect = p.deficit;
+    const sfaEffect = p.sfa;
+    const fxEffect = fxAdjustment/gdp;
+
+    // Amortissement du principal : échéance brute de trésorerie,
+    // et non une augmentation automatique de la dette nette.
+    const principalDue = previousDebt*p.amortization;
+    const grossService = interestCost + principalDue;
+    const revenue = gdp*p.revenue;
+    const serviceRatio = revenue>0 ? grossService/revenue : null;
+
+    rows.push({
+      year:t,
+      gdp,
+      debt,
+      ratio,
+      interest:interestCost,
+      primary:primaryDeficit,
+      service:grossService,
+      serviceRatio,
+      snowball,
+      primaryEffect,
+      sfaEffect,
+      fxEffect
+    });
+  }
+
+  return rows;
+}
+
+// ==========================================
+// 3. MOTEUR DE GRAPHIQUES (canvas, sans dépendance)
+// ==========================================
+
+function niceStep(x) {
+  if (x <= 0) return 1;
+  const exp = Math.pow(10, Math.floor(Math.log10(x)));
+  const f = x / exp;
+  const nf = f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10;
+  return nf * exp;
+}
+
+class MiniChart {
+
+  constructor(canvasId, cfg) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas.getContext("2d");
+    this.cfg = cfg;
+    this.labels = [];
+    this.datasets = [];
+    this.hover = null;
+    this.area = null;
+
+    this.canvas.addEventListener("mousemove", e => this.onMove(e));
+    this.canvas.addEventListener("mouseleave", () => {
+      this.hover = null;
+      this.draw();
+    });
+    this.canvas.addEventListener("touchmove", e => {
+      if (e.touches.length) this.onMove(e.touches[0]);
+    }, {passive:true});
+
+    window.addEventListener("resize", () => this.draw());
+  }
+
+  setData(labels, datasets) {
+    this.labels = labels;
+    this.datasets = datasets;
+    this.draw();
+  }
+
+  fmt(v) {
+    const d = this.cfg.decimals !== undefined ? this.cfg.decimals : 2;
+    if (this.cfg.unit === "%") return v.toFixed(2) + " %";
+    return v.toLocaleString("fr-FR", {maximumFractionDigits:d});
+  }
+
+  onMove(e) {
+    if (!this.area || !this.labels.length) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const a = this.area;
+    const n = this.labels.length;
+    let idx;
+    if (this.cfg.type === "bar") {
+      idx = Math.floor((x - a.l) / a.w * n);
+    } else {
+      idx = Math.round((x - a.l) / a.w * (n - 1));
+    }
+    idx = Math.max(0, Math.min(n - 1, idx));
+    if (x < a.l - 5 || x > a.l + a.w + 5) idx = null;
+    if (idx !== this.hover) {
+      this.hover = idx;
+      this.draw();
+    }
+  }
+
+  draw() {
+    const c = this.canvas;
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.clientWidth;
+    const H = c.clientHeight;
+    if (!W || !H) return;
+
+    c.width = Math.round(W * dpr);
+    c.height = Math.round(H * dpr);
+
+    const ctx = this.ctx;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = "12px Arial, sans-serif";
+
+    const n = this.labels.length;
+    if (!n || !this.datasets.length) return;
+
+    const isBar = this.cfg.type === "bar";
+
+    // Marges
+    const L = 62, R = 16, T = 34, B = 62;
+    const w = W - L - R;
+    const h = H - T - B;
+    this.area = {l:L, t:T, w, h};
+
+    // Échelle Y
+    let min = Infinity, max = -Infinity;
+    this.datasets.forEach(ds => ds.data.forEach(v => {
+      if (isFinite(v)) {
+        if (v < min) min = v;
+        if (v > max) max = v;
+      }
+    }));
+    if (!isFinite(min)) { min = 0; max = 1; }
+    if (isBar) { min = Math.min(min, 0); max = Math.max(max, 0); }
+    if (max === min) { max = min + 1; }
+    const step = niceStep((max - min) / 5);
+    const yMin = Math.floor(min / step) * step;
+    const yMax = Math.ceil(max / step) * step;
+
+    const yPos = v => T + h - (v - yMin) / (yMax - yMin) * h;
+    const xPos = i => isBar
+      ? L + (i + 0.5) / n * w
+      : L + (n === 1 ? w / 2 : i / (n - 1) * w);
+
+    // Titre
+    ctx.fillStyle = "#17243a";
+    ctx.font = "bold 14px Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.cfg.title, W / 2, 16);
+
+    // Grille + étiquettes Y
+    ctx.font = "12px Arial, sans-serif";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (let v = yMin; v <= yMax + step / 2; v += step) {
+      const y = yPos(v);
+      ctx.strokeStyle = Math.abs(v) < step / 1000 ? "#9aa7ba" : "#e3e8f0";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(L, y);
+      ctx.lineTo(L + w, y);
+      ctx.stroke();
+      ctx.fillStyle = "#68758a";
+      const txt = this.cfg.unit === "%"
+        ? (Math.round(v * 100) / 100) + " %"
+        : v.toLocaleString("fr-FR", {maximumFractionDigits:0});
+      ctx.fillText(txt, L - 8, y);
+    }
+
+    // Étiquettes X
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "#68758a";
+    const every = Math.max(1, Math.ceil(n / 12));
+    for (let i = 0; i < n; i += every) {
+      ctx.fillText(String(this.labels[i]), xPos(i), T + h + 8);
+    }
+    if (this.cfg.xTitle) {
+      ctx.fillText(this.cfg.xTitle, L + w / 2, T + h + 26);
+    }
+
+    // Séries
+    if (isBar) {
+      const groupW = w / n * 0.78;
+      const barW = groupW / this.datasets.length;
+      const zero = yPos(0);
+      this.datasets.forEach((ds, k) => {
+        ctx.fillStyle = ds.color;
+        ds.data.forEach((v, i) => {
+          const x = xPos(i) - groupW / 2 + k * barW;
+          const y = yPos(v);
+          ctx.fillRect(x, Math.min(y, zero), Math.max(barW - 1, 1), Math.abs(zero - y));
+        });
+      });
+    } else {
+      this.datasets.forEach((ds, k) => {
+        // Remplissage
+        if (ds.fill) {
+          ctx.beginPath();
+          ds.data.forEach((v, i) => {
+            const x = xPos(i), y = yPos(v);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          });
+          ctx.lineTo(xPos(n - 1), T + h);
+          ctx.lineTo(xPos(0), T + h);
+          ctx.closePath();
+          ctx.fillStyle = ds.fillColor || "rgba(36,87,167,.1)";
+          ctx.fill();
+        }
+        // Ligne
+        ctx.beginPath();
+        ds.data.forEach((v, i) => {
+          const x = xPos(i), y = yPos(v);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = ds.color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = "round";
+        ctx.stroke();
+        // Points
+        if (n <= 31) {
+          ctx.fillStyle = ds.color;
+          ds.data.forEach((v, i) => {
+            ctx.beginPath();
+            ctx.arc(xPos(i), yPos(v), 3, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+      });
+    }
+
+    // Légende
+    ctx.font = "12px Arial, sans-serif";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "left";
+    const items = this.datasets.map(ds => ({
+      name: ds.label,
+      color: ds.color,
+      width: ctx.measureText(ds.label).width + 30
+    }));
+    const totalW = items.reduce((s, it) => s + it.width, 0);
+    let lx = Math.max(8, (W - totalW) / 2);
+    const ly = H - 14;
+    items.forEach(it => {
+      ctx.fillStyle = it.color;
+      ctx.fillRect(lx, ly - 5, 14, 10);
+      ctx.fillStyle = "#17243a";
+      ctx.fillText(it.name, lx + 19, ly);
+      lx += it.width;
+    });
+
+    // Survol / infobulle
+    if (this.hover !== null) {
+      const i = this.hover;
+      const gx = xPos(i);
+
+      if (!isBar) {
+        ctx.strokeStyle = "rgba(23,36,58,.35)";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(gx, T);
+        ctx.lineTo(gx, T + h);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      } else {
+        ctx.fillStyle = "rgba(23,36,58,.06)";
+        ctx.fillRect(gx - w / n / 2, T, w / n, h);
+      }
+
+      const lines = [String(this.cfg.hoverPrefix || "") + this.labels[i]]
+        .concat(this.datasets.map(ds => ds.label + " : " + this.fmt(ds.data[i])));
+      ctx.font = "12px Arial, sans-serif";
+      const bw = Math.max(...lines.map(s => ctx.measureText(s).width)) + 20;
+      const bh = lines.length * 18 + 10;
+      let bx = gx + 14;
+      if (bx + bw > W - 4) bx = gx - 14 - bw;
+      if (bx < 4) bx = 4;
+      const by = T + 6;
+
+      ctx.fillStyle = "rgba(16,43,80,.94)";
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      lines.forEach((s, k) => {
+        ctx.font = (k === 0 ? "bold " : "") + "12px Arial, sans-serif";
+        ctx.fillText(s, bx + 10, by + 14 + k * 18);
+      });
+    }
+  }
+}
+
+let debtChart, nominalChart, componentsChart, scenarioChart;
+
+function createCharts() {
+  debtChart = new MiniChart("debtChart", {
+    type:"line",
+    title:"Évolution du ratio dette / PIB",
+    unit:"%",
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
+
+  nominalChart = new MiniChart("nominalChart", {
+    type:"line",
+    title:"Dette et PIB nominal (milliards FCFA)",
+    unit:"",
+    decimals:1,
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
+
+  componentsChart = new MiniChart("componentsChart", {
+    type:"bar",
+    title:"Décomposition de la variation annuelle du ratio (points de PIB)",
+    unit:"%",
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
+
+  scenarioChart = new MiniChart("scenarioChart", {
+    type:"line",
+    title:"Comparaison des scénarios de dette",
+    unit:"%",
+    xTitle:"Année",
+    hoverPrefix:"Année "
+  });
+}
+
+// ==========================================
+// 4. INTERPRETATION ECONOMIQUE
+// ==========================================
+
+function interpret(p,rows) {
+
+  const last = rows[rows.length-1];
+
+  const initialSnowball =
+    (p.interest-p.growth)/(1+p.growth)*p.debt;
+
+  const stabilizing =
+    -initialSnowball-p.sfa-
+    (p.debt*p.fxShare*p.depreciation/(1+p.growth));
+
+  let messages=[];
+
+  if(p.interest>p.growth) {
+    messages.push(
+      "Le taux d'intérêt nominal est supérieur à la croissance nominale. "+
+      "Le différentiel intérêt-croissance exerce une pression à la hausse "+
+      "sur le ratio d'endettement."
+    );
+  } else if(p.interest<p.growth) {
+    messages.push(
+      "La croissance nominale est supérieure au taux d'intérêt. "+
+      "Cet écart contribue à réduire le ratio dette/PIB, toutes choses égales par ailleurs."
+    );
+  } else {
+    messages.push(
+      "Le taux d'intérêt et la croissance nominale sont égaux. "+
+      "L'effet boule de neige est nul dans ce modèle."
+    );
+  }
+
+  if(p.deficit>0) {
+    messages.push(
+      "Le pays présente un déficit primaire. Il ajoute chaque année "+
+      "un besoin de financement à son stock de dette."
+    );
+  } else if(p.deficit<0) {
+    messages.push(
+      "Le pays présente un excédent primaire, qui contribue "+
+      "à limiter la progression de la dette."
+    );
+  }
+
+  if(last.ratio>p.debt) {
+    messages.push(
+      "Le ratio de dette augmente sur la période simulée. "+
+      "Il faut examiner le différentiel intérêt-croissance, "+
+      "le déficit primaire, les ajustements stock-flux et le change."
+    );
+  } else {
+    messages.push(
+      "Le ratio de dette diminue sur la période simulée. "+
+      "Cette évolution dépend des hypothèses retenues."
+    );
+  }
+
+  if(p.fxShare>0 && p.depreciation>0) {
+    messages.push(
+      "La dépréciation augmente la valeur en monnaie nationale "+
+      "de la dette libellée en devises."
+    );
+  }
+
+  if(p.revenue>0) {
+    const burden = p.debt*p.interest/p.revenue*100;
+    messages.push(
+      "Les intérêts représentent initialement environ "+
+      burden.toFixed(2)+" % des recettes publiques."
+    );
+  }
+
+  messages.push(
+    "Le déficit primaire stabilisant initial est d'environ "+
+    (stabilizing*100).toFixed(2)+
+    " % du PIB. Un chiffre négatif signifie qu'un excédent primaire "+
+    "serait nécessaire pour stabiliser le ratio, selon les hypothèses du modèle."
+  );
+
+  return messages;
+}
+
+// ==========================================
+// 5. TABLEAU DE PROJECTION
+// ==========================================
+
+function renderTable(rows) {
+
+  const tbody=document.getElementById("projectionTable");
+  tbody.innerHTML="";
+
+  rows.forEach(r=>{
+    if(r.year===0)return;
+
+    const tr=document.createElement("tr");
+
+    const cells=[
+      r.year,
+      money(r.gdp),
+      money(r.debt),
+      percent(r.ratio),
+      money(r.interest),
+      money(r.primary),
+      r.serviceRatio===null?"N/D":percent(r.serviceRatio)
+    ];
+
+    cells.forEach(v=>{
+      const td=document.createElement("td");
+      td.textContent=v;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+// ==========================================
+// 6. MISE A JOUR GLOBALE
+// ==========================================
+
+function update() {
+
+  try {
+
+    const p=parameters();
+    const rows=simulate(p);
+    const labels=rows.map(r=>r.year);
+
+    document.getElementById("initialDebt").textContent=percent(p.debt);
+    document.getElementById("initialDeficit").textContent=percent(p.deficit);
+    document.getElementById("initialInterest").textContent=percent(p.interest);
+    document.getElementById("initialGrowth").textContent=percent(p.growth);
+
+    const last=rows[rows.length-1];
+
+    document.getElementById("resultDebt").textContent=percent(last.ratio);
+
+    document.getElementById("variation").textContent=
+      ((last.ratio-p.debt)*100).toFixed(2)+" points";
+
+    const snowball=(p.interest-p.growth)/(1+p.growth)*p.debt;
+
+    document.getElementById("snowball").textContent=
+      (snowball*100).toFixed(2)+" points";
+
+    const stabilizing=
+      -snowball-p.sfa-
+      p.debt*p.fxShare*p.depreciation/(1+p.growth);
+
+    document.getElementById("stabilizing").textContent=
+      (stabilizing*100).toFixed(2)+" %";
+
+    const interestBurden=
+      p.revenue>0 ? p.debt*p.interest/p.revenue*100 : 0;
+
+    const serviceBurden=
+      p.revenue>0 ?
+      (p.debt*p.interest+p.debt*p.amortization)/p.revenue*100 : 0;
+
+    document.getElementById("interestBurden").textContent=
+      interestBurden.toFixed(2)+" %";
+
+    document.getElementById("serviceBurden").textContent=
+      serviceBurden.toFixed(2)+" %";
+
+    // Graphique 3.2
+    debtChart.setData(labels,[
+      {
+        label:"Dette / PIB",
+        data:rows.map(r=>r.ratio*100),
+        color:"#2457a7",
+        fill:true,
+        fillColor:"rgba(36,87,167,.12)"
+      }
+    ]);
+
+    // Graphique 3.3
+    nominalChart.setData(labels,[
+      {label:"Dette nominale",data:rows.map(r=>r.debt),color:"#16845b"},
+      {label:"PIB nominal",data:rows.map(r=>r.gdp),color:"#d58b24"}
+    ]);
+
+    // Graphique 3.4
+    const tail=rows.slice(1);
+    componentsChart.setData(tail.map(r=>r.year),[
+      {label:"Effet intérêt-croissance",data:tail.map(r=>r.snowball*100),color:"#2457a7"},
+      {label:"Déficit primaire",data:tail.map(r=>r.primaryEffect*100),color:"#d58b24"},
+      {label:"Autres ajustements",data:tail.map(r=>r.sfaEffect*100),color:"#16845b"},
+      {label:"Effet de change",data:tail.map(r=>r.fxEffect*100),color:"#c43d4b"}
+    ]);
+
+    renderTable(rows);
+
+    document.getElementById("interpretation").innerHTML=
+      interpret(p,rows).map(x=>"<p>• "+x+"</p>").join("");
+
+    updateScenarios(p);
+
+    window.currentRows=rows;
+
+  } catch(error) {
+    document.getElementById("interpretation").textContent=
+      error.message;
+  }
+}
+
+// ==========================================
+// 7. SCENARIOS
+// ==========================================
+
+function updateScenarios(p) {
+
+  const favorable={
+    ...p,
+    interest:Math.max(0,p.interest-.015),
+    growth:p.growth+.01,
+    deficit:p.deficit-.005
+  };
+
+  const stress={
+    ...p,
+    interest:p.interest+.02,
+    growth:p.growth-.02,
+    deficit:p.deficit+.01
+  };
+
+  const baseRows=simulate(p);
+  const favorableRows=simulate(favorable);
+  const stressRows=simulate(stress);
+
+  const labels=baseRows.map(r=>r.year);
+
+  scenarioChart.setData(labels,[
+    {label:"Référence",data:baseRows.map(r=>r.ratio*100),color:"#2457a7"},
+    {label:"Favorable",data:favorableRows.map(r=>r.ratio*100),color:"#16845b"},
+    {label:"Stress",data:stressRows.map(r=>r.ratio*100),color:"#c43d4b"}
+  ]);
+
+  const a=baseRows[baseRows.length-1].ratio*100;
+  const b=favorableRows[favorableRows.length-1].ratio*100;
+  const c=stressRows[stressRows.length-1].ratio*100;
+
+  document.getElementById("scenarioText").innerHTML=
+    "<p>À l'horizon choisi :</p>"+
+    "<p>Référence : "+a.toFixed(2)+" % du PIB.</p>"+
+    "<p>Scénario favorable : "+b.toFixed(2)+" % du PIB.</p>"+
+    "<p>Scénario de stress : "+c.toFixed(2)+" % du PIB.</p>"+
+    "<p>Écart entre stress et scénario favorable : "+
+    (c-b).toFixed(2)+" points de PIB.</p>"+
+    "<p>Ces résultats illustrent la sensibilité de la dette aux "+
+    "hypothèses macroéconomiques. Ils ne constituent pas des prévisions.</p>";
+}
+
+// ==========================================
+// 8. FISCALITE
+// ==========================================
+
+function updateTax() {
+
+  const gdp=Number(document.getElementById("taxBase").value);
+  const rate=Number(document.getElementById("taxRate").value)/100;
+  const improvement=Number(document.getElementById("taxImprovement").value)/100;
+
+  const initial=gdp*rate;
+  const final=gdp*(rate+improvement);
+
+  document.getElementById("taxInitial").textContent=
+    money(initial)+" milliards FCFA";
+
+  document.getElementById("taxFinal").textContent=
+    money(final)+" milliards FCFA";
+
+  document.getElementById("taxGain").textContent=
+    money(final-initial)+" milliards FCFA";
+
+  document.getElementById("taxInterpretation").textContent=
+    "À PIB constant, une hausse de "+
+    (improvement*100).toFixed(2)+
+    " point de recettes/PIB produirait "+
+    money(final-initial)+
+    " milliards FCFA supplémentaires. Ce calcul ne tient pas compte "+
+    "des réactions comportementales, des coûts de collecte ou des effets sur la croissance.";
+}
+
+function updateIncidence() {
+
+  const es=Number(document.getElementById("elasticSupply").value);
+  const ed=Number(document.getElementById("elasticDemand").value);
+
+  if(es<=0 || ed<=0)return;
+
+  const consumer=es/(es+ed);
+  const producer=ed/(es+ed);
+
+  document.getElementById("consumerShare").textContent=percent(consumer);
+  document.getElementById("producerShare").textContent=percent(producer);
+}
+
+// ==========================================
+// 9. INFLATION ET OLIVERA-TANZI
+// ==========================================
+
+function updateInflation() {
+
+  const tax=Number(document.getElementById("taxAmount").value);
+  const inflation=Number(document.getElementById("inflation").value)/100;
+  const delay=Number(document.getElementById("delay").value);
+
+  const real=tax/Math.pow(1+inflation,delay);
+  const loss=tax-real;
+
+  document.getElementById("realTax").textContent=money(real)+" FCFA";
+  document.getElementById("taxLoss").textContent=money(loss)+" FCFA";
+
+  document.getElementById("inflationInterpretation").textContent=
+    "Pour une recette nominale de "+money(tax)+
+    " FCFA, une inflation annuelle de "+
+    (inflation*100).toFixed(2)+
+    " % sur un délai de "+delay+
+    " année(s), la valeur réelle est de "+
+    money(real)+" FCFA.";
+}
+
+// ==========================================
+// 10. EFFICACITE
+// ==========================================
+
+function updateEfficiency() {
+
+  const score=Number(document.getElementById("efficiency").value);
+
+  document.getElementById("efficiencyValue").textContent=
+    (score*100).toFixed(0)+" %";
+
+  document.getElementById("efficiencyInterpretation").textContent=
+    "Le score de "+score.toFixed(2)+
+    " indique une efficacité technique estimée de "+
+    (score*100).toFixed(0)+
+    " % par rapport à la frontière du modèle. "+
+    "Il ne permet pas, à lui seul, de calculer une économie budgétaire réelle.";
+}
+
+// ==========================================
+// 11. EXPORT CSV
+// ==========================================
+
+function downloadCSV() {
+
+  if(!window.currentRows)return;
+
+  const rows=window.currentRows;
+
+  const header=[
+    "Annee","PIB_nominal","Dette_nominale",
+    "Dette_PIB","Interets","Deficit_primaire",
+    "Service_dette_recettes"
+  ];
+
+  const data=[header.join(";")];
+
+  rows.forEach(r=>{
+    data.push([
+      r.year,
+      r.gdp.toFixed(4),
+      r.debt.toFixed(4),
+      (r.ratio*100).toFixed(4),
+      r.interest.toFixed(4),
+      r.primary.toFixed(4),
+      (r.serviceRatio===null || r.serviceRatio===undefined)?
+        "":(r.serviceRatio*100).toFixed(4)
+    ].join(";"));
+  });
+
+  const blob=new Blob(
+    ["\uFEFF"+data.join("\n")],
+    {type:"text/csv;charset=utf-8;"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download="simulation_dette_publique.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+// ==========================================
+// 12. REINITIALISATION
+// ==========================================
+
+function resetSimulation() {
+
+  const defaults={
+    debt:65,
+    interest:8,
+    growth:7,
+    deficit:1.5,
+    sfa:0,
+    revenue:18,
+    amortization:5,
+    fxShare:40,
+    depreciation:0
+  };
+
+  Object.entries(defaults).forEach(([id,v])=>{
+    document.getElementById(id).value=v;
+    document.getElementById(id+"N").value=v;
+  });
+
+  document.getElementById("horizon").value=15;
+
+  update();
+}
+
+// ==========================================
+// 13. INITIALISATION
+// ==========================================
+
+bindControls();
+
+bindPair("taxRate", updateTax);
+bindPair("taxImprovement", updateTax);
+bindPair("inflation", updateInflation);
+bindPair("delay", updateInflation);
+bindPair("efficiency", updateEfficiency);
+
+document.getElementById("taxBase").addEventListener("input",updateTax);
+document.getElementById("taxAmount").addEventListener("input",updateInflation);
+document.getElementById("elasticSupply").addEventListener("input",updateIncidence);
+document.getElementById("elasticDemand").addEventListener("input",updateIncidence);
+
+createCharts();
+update();
+updateTax();
+updateIncidence();
+updateInflation();
+updateEfficiency();
+
+</script>
+
+</body>
+</html>
